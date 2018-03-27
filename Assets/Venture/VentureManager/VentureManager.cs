@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Google;
+using Firebase;
 using Firebase.Auth;
+using Firebase.Database;
+using Firebase.Unity.Editor;
 
 public class VentureManager : MonoBehaviour
 {
-    public static VentureManager instance = null;
-    public static GoogleSignInUser googleUser = null;
-    public static FirebaseUser firebaseUser = null;
-    public Transform canvas;
-    public GameObject[] forms;
+    public static VentureManager Instance = null;
+    public static GoogleSignInUser GoogleUser = null;
+    public static FirebaseUser FirebaseUser = null;
+    public static DatabaseReference Database;
+    public Transform Canvas;
+    public GameObject[] Forms;
 
     void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 
@@ -26,17 +30,28 @@ public class VentureManager : MonoBehaviour
             RequestIdToken = true,
             UseGameSignIn = false
         };
-        if (googleUser == null)
-        {
-			//instantiateForm(0);
-			Instantiate(forms[0], canvas);
-        }
+        if (GoogleUser == null)
+            Instantiate(Forms[0], Canvas);
+
+        //Unity editor temporary user 
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://venture-196117.firebaseio.com/");
+        FirebaseApp.DefaultInstance.SetEditorP12FileName("Venture-9af379c14c56.p12");
+        FirebaseApp.DefaultInstance.SetEditorServiceAccountEmail("venture-196117@appspot.gserviceaccount.com");
+        FirebaseApp.DefaultInstance.SetEditorP12Password("notasecret");
+    
+        Database = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
-	// void instantiateForm(int index)
-	// {
-	// 	GameObject form = Instantiate(forms[index]);
+    void Start()
+    {
+        Player player = new Player("Querulous Yogi", "Iptos");
+        player.CreateNewPlayerData("12345");
+    }
+
+    // void instantiateForm(int index)
+    // {
+    // 	GameObject form = Instantiate(forms[index]);
     //     form.transform.SetParent(canvas);
-	// 	form.GetComponent<RectTransform>().ForceUpdateRectTransforms();
-	// }
+    // 	form.GetComponent<RectTransform>().ForceUpdateRectTransforms();
+    // }
 }

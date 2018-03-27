@@ -16,7 +16,7 @@ public class Form : MonoBehaviour
         animator.SetTrigger("open");
     }
 
-    void Apply()
+    public void Apply()
     {
         animator.SetTrigger("apply");
     }
