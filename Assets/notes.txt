@@ -1,0 +1,10 @@
+## LINKS ##
+https://github.com/googlesamples/google-signin-unity
+
+## TODOS ##
+- Validate all forms from a single function using models
+- Make action buttons (at least most of them) work with all forms.
+- !Maybe treat settings form different than other forms.
+- Make user choose a in-game display name
+- Firebase connection (start with user data)
+- Invisible slider ui control

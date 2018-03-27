@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="firebase_database_url" translatable="false">https://venture-196117.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">356906761499</string>
+  <string name="google_storage_bucket" translatable="false">venture-196117.appspot.com</string>
+  <string name="project_id" translatable="false">venture-196117</string>
+  <string name="google_api_key" translatable="false">AIzaSyCkU8SfUucXz4NXghoueS_CbQpGIIZ6DrA</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCkU8SfUucXz4NXghoueS_CbQpGIIZ6DrA</string>
+  <string name="google_app_id" translatable="false">1:356906761499:android:84c99618d651705b</string>
+  <string name="default_web_client_id" translatable="false">356906761499-utkt6d8uicpjckqu2ppq980mr4kfjdv7.apps.googleusercontent.com</string>
+</resources>
