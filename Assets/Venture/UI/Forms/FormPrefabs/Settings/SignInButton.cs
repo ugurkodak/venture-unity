@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using Google;
+using Firebase.Auth;
 
 public class SignInButton : MonoBehaviour
 {
@@ -17,22 +18,39 @@ public class SignInButton : MonoBehaviour
 
     void ToggleAuthorization()
     {
-        if (VentureManager.user == null)
+        if (VentureManager.googleUser == null)
         {
             try
             {
                 gameObject.GetComponentInChildren<Text>().text = "Working...";
-                GoogleSignIn.DefaultInstance.SignIn().ContinueWith((Task<GoogleSignInUser> task) =>
+                //Google authentication
+                GoogleSignIn.DefaultInstance.SignIn().ContinueWith((Task<GoogleSignInUser> googleAuthTask) =>
                 {
-                    if (task.IsCompleted)
+                    if (googleAuthTask.IsCompleted)
                     {
-                        VentureManager.user = task.Result;
-                        gameObject.GetComponentInChildren<Text>().text = VentureManager.user.DisplayName;
-                        console.Print("Authentication successfull.");
+                        VentureManager.googleUser = googleAuthTask.Result;
+                        console.Print("Google authentication successfull.");
+                        //Firebase authentication
+                        FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(
+                            GoogleAuthProvider.GetCredential(VentureManager.googleUser.IdToken, null))
+                        .ContinueWith(firebaseAuthTask =>
+                        {
+                            if (firebaseAuthTask.IsCompleted)
+                            {
+                                VentureManager.firebaseUser = firebaseAuthTask.Result;
+                                console.Print("Firebase authentication successfull.");
+                                gameObject.GetComponentInChildren<Text>().text = VentureManager.firebaseUser.DisplayName;
+                            }
+                            else
+                            {
+                                VentureManager.firebaseUser = null;
+                                console.Print("Firebase authentication failed.");
+                            }
+                        });
                     }
                     else
                     {
-                        VentureManager.user = null;
+                        VentureManager.googleUser = null;
                         gameObject.GetComponentInChildren<Text>().text = "Sign in";
                         console.Print("Unexpected authentication error.");
                     }
@@ -46,7 +64,8 @@ public class SignInButton : MonoBehaviour
         else
         {
             GoogleSignIn.DefaultInstance.SignOut();
-            VentureManager.user = null;
+            FirebaseAuth.DefaultInstance.SignOut();
+            VentureManager.googleUser = null;
             gameObject.GetComponentInChildren<Text>().text = "Sign in";
             console.Print("Signed out. Please sign in again.");
         }

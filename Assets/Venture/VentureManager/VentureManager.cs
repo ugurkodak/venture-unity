@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Google;
+using Firebase.Auth;
 
 public class VentureManager : MonoBehaviour
 {
     public static VentureManager instance = null;
-    public static GoogleSignInUser user = null;
+    public static GoogleSignInUser googleUser = null;
+    public static FirebaseUser firebaseUser = null;
     public Transform canvas;
     public GameObject[] forms;
 
@@ -24,7 +26,7 @@ public class VentureManager : MonoBehaviour
             RequestIdToken = true,
             UseGameSignIn = false
         };
-        if (user == null)
+        if (googleUser == null)
         {
 			//instantiateForm(0);
 			Instantiate(forms[0], canvas);
@@ -36,27 +38,5 @@ public class VentureManager : MonoBehaviour
 	// 	GameObject form = Instantiate(forms[index]);
     //     form.transform.SetParent(canvas);
 	// 	form.GetComponent<RectTransform>().ForceUpdateRectTransforms();
-		
 	// }
-
-    // void Start()
-    // {
-
-    // }
-
-    // bool active = true;
-
-    // void Open()
-    // {
-    // 	active = true;		
-    // 	foreach (Transform child in transform)
-    // 		child.gameObject.SetActive(active);
-    // }
-
-    // void Done()
-    // {
-    // 	active = false;
-    // 	foreach (Transform child in transform)
-    // 		child.gameObject.SetActive(active);
-    // }
 }
