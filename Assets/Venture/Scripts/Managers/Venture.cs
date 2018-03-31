@@ -1,23 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Google;
-using Firebase;
+﻿using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Unity.Editor;
+using Google;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class VentureManager : MonoBehaviour
+public class Venture : MonoBehaviour
 {
-    public static VentureManager Instance = null;
+    public static Venture Instance = null;
+	public static Console Console = null;
     public static GoogleSignInUser GoogleUser = null;
     public static FirebaseUser FirebaseUser = null;
     public static DatabaseReference Database;
-    public Transform Canvas;
-    public GameObject[] Forms;
 
-    void Awake()
+	void Awake()
     {
+		//Singleton
         if (Instance == null)
             Instance = this;
         else if (Instance != this)
@@ -30,8 +30,8 @@ public class VentureManager : MonoBehaviour
             RequestIdToken = true,
             UseGameSignIn = false
         };
-        if (GoogleUser == null)
-            Instantiate(Forms[0], Canvas);
+		if (GoogleUser == null)
+			Document.Instance.Open(Document.Instance.SignIn);
 
         //Unity editor temporary user 
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://venture-196117.firebaseio.com/");
@@ -41,17 +41,4 @@ public class VentureManager : MonoBehaviour
     
         Database = FirebaseDatabase.DefaultInstance.RootReference;
     }
-
-    void Start()
-    {
-        Player player = new Player("Querulous Yogi", "Iptos");
-        player.CreateNewPlayerData("12345");
-    }
-
-    // void instantiateForm(int index)
-    // {
-    // 	GameObject form = Instantiate(forms[index]);
-    //     form.transform.SetParent(canvas);
-    // 	form.GetComponent<RectTransform>().ForceUpdateRectTransforms();
-    // }
 }

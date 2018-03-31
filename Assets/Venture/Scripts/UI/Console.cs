@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VentureConsole : MonoBehaviour
+public class Console : MonoBehaviour
 {
 	ScrollRect scrollRect;
 	RectTransform content;
