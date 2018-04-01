@@ -3,12 +3,12 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using Google;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Venture : MonoBehaviour
 {
+	public const bool EDITOR = true;
+
     public static Venture Instance = null;
 	public static Console Console = null;
     public static GoogleSignInUser GoogleUser = null;
@@ -30,8 +30,6 @@ public class Venture : MonoBehaviour
             RequestIdToken = true,
             UseGameSignIn = false
         };
-		if (GoogleUser == null)
-			Document.Instance.Open(Document.Instance.SignIn);
 
         //Unity editor temporary user 
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://venture-196117.firebaseio.com/");
@@ -41,4 +39,10 @@ public class Venture : MonoBehaviour
     
         Database = FirebaseDatabase.DefaultInstance.RootReference;
     }
+
+	void Start()
+	{
+		if (GoogleUser == null)
+			Document.Instance.Open(Document.Instance.SignIn);
+	}
 }

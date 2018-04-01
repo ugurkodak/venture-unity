@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Firebase.Database;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 
 public class Character : MonoBehaviour
 {
@@ -36,8 +32,11 @@ public class Character : MonoBehaviour
 					Instance.lastName = task.Result.Child("lastName").Value as string;
 					Instance.worldId = task.Result.Child("worldId").Value as string;
 				}
-				//else
-					//Document.Instance.OpenCharacterCreation(id);
+				else
+				{
+					Instance.id = id;
+					Document.Instance.Open(Document.Instance.CharacterCreation);
+				}
 			}
 			else
 				Debug.Log("Error at SetupPlayerSession()");

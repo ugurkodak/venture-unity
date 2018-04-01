@@ -495,6 +495,12 @@ Prefab:
       value: 
       objectReference: {fileID: 1327455632104108, guid: ed2af40fc799911488ddb5626808ddc2,
         type: 2}
+    - target: {fileID: 114612031018673258, guid: 6838b184475207749a38ab883ffa0854,
+        type: 2}
+      propertyPath: CharacterCreation
+      value: 
+      objectReference: {fileID: 1695394055680374, guid: c9f8540c830645e479025fb1d9439427,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6838b184475207749a38ab883ffa0854, type: 2}
   m_IsPrefabParent: 0
