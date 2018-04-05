@@ -43,7 +43,7 @@ public class Character : MonoBehaviour
 		});
 	}
 
-	public void CreateNewCharacterData(string id)
+	public void CreateNewCharacterData(string id, string firstName, string lastName, string worldId)
 	{
 		Venture.Database.Child("players").Child(id).SetRawJsonValueAsync(JsonUtility.ToJson(this)).ContinueWith(task =>
 		{
