@@ -4,10 +4,10 @@ public class Character : MonoBehaviour
 {
 	public static Character Instance;
 
-	string id;
-	string firstName;
-	string lastName;
-	string worldId;
+	public string Id;
+	public string FirstName;
+	public string LastName;
+	public string WorldId;
 
 	void Awake()
 	{
@@ -27,14 +27,14 @@ public class Character : MonoBehaviour
 			{
 				if (task.Result.Exists)
 				{
-					Instance.id = id;
-					Instance.firstName = task.Result.Child("firstName").Value as string;
-					Instance.lastName = task.Result.Child("lastName").Value as string;
-					Instance.worldId = task.Result.Child("worldId").Value as string;
+					Instance.Id = id;
+					Instance.FirstName = task.Result.Child("firstName").Value as string;
+					Instance.LastName = task.Result.Child("lastName").Value as string;
+					Instance.WorldId = task.Result.Child("worldId").Value as string;
 				}
 				else
 				{
-					Instance.id = id;
+					Instance.Id = id;
 					Document.Instance.Open(Document.Instance.CharacterCreation);
 				}
 			}

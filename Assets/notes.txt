@@ -8,3 +8,9 @@ https://github.com/googlesamples/google-signin-unity
 - Firebase connection (start with user data)
 - Make user choose a in-game display name
 - Invisible slider ui control
+
+
+List<string> worlds = new List<string>();
+foreach (var world in task.Result.Children)
+	worlds.Add((world.Value as IDictionary<string, object>)["name"] as string);
+dropdownWorld.AddOptions(worlds);

@@ -22,6 +22,7 @@ public class CharacterCreation : MonoBehaviour
 
 	void Start()
 	{
+		//Fill dropdown with available worlds
 		Venture.Database.Child("worlds").GetValueAsync().ContinueWith(task =>
 		{
 			if (task.IsCompleted)
@@ -39,7 +40,18 @@ public class CharacterCreation : MonoBehaviour
 
 	void onSubmit()
 	{
-		//Validate
+		//TODO: Validate
 
+		Venture.Database.Child("worlds").OrderByChild("name").EqualTo(dropdownWorld.options[dropdownWorld.value].text)
+			.GetValueAsync().ContinueWith(task =>
+			{
+				if (task.IsCompleted)
+					if (task.Result.Exists)
+						foreach (var world in task.Result.Children)
+							Character.Instance.WorldId = world.Key;
+			});
+		Character.Instance.FirstName = fieldFirstName.text;
+		Character.Instance.LastName = fieldLastName.text;
+		print(JsonUtility.ToJson(Character.Instance));
 	}
 }
