@@ -7,13 +7,12 @@ using UnityEngine;
 
 public class Venture : MonoBehaviour
 {
-	public const bool EDITOR = true;
-
     public static Venture Instance = null;
 	public static Console Console = null;
     public static GoogleSignInUser GoogleUser = null;
     public static FirebaseUser FirebaseUser = null;
     public static DatabaseReference Database;
+	public static string UserId = "123456789"; //TODO: There is a better way probably
 
 	void Awake()
     {
@@ -31,7 +30,7 @@ public class Venture : MonoBehaviour
             UseGameSignIn = false
         };
 
-        //Unity editor temporary user 
+        //UNITY_EDITOR User 
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://venture-196117.firebaseio.com/");
         FirebaseApp.DefaultInstance.SetEditorP12FileName("Venture-9af379c14c56.p12");
         FirebaseApp.DefaultInstance.SetEditorServiceAccountEmail("venture-196117@appspot.gserviceaccount.com");

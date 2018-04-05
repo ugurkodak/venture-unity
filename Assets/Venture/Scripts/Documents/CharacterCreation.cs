@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Database;
 
 public class CharacterCreation : MonoBehaviour
 {
@@ -41,17 +40,19 @@ public class CharacterCreation : MonoBehaviour
 	void onSubmit()
 	{
 		//TODO: Validate
-
 		Venture.Database.Child("worlds").OrderByChild("name").EqualTo(dropdownWorld.options[dropdownWorld.value].text)
-			.GetValueAsync().ContinueWith(task =>
+		.GetValueAsync().ContinueWith(task =>
+		{
+			if (task.IsCompleted)
 			{
-				if (task.IsCompleted)
-					if (task.Result.Exists)
-						foreach (var world in task.Result.Children)
-							Character.Instance.WorldId = world.Key;
-			});
-		Character.Instance.FirstName = fieldFirstName.text;
-		Character.Instance.LastName = fieldLastName.text;
-		print(JsonUtility.ToJson(Character.Instance));
+				if (task.Result.Exists)
+					foreach (var world in task.Result.Children)
+						Character.Instance.WorldId = world.Key;
+				Character.Instance.FirstName = fieldFirstName.text;
+				Character.Instance.LastName = fieldLastName.text;
+				Character.Instance.CreateNewCharacterData();
+				Document.Instance.Submit();
+			}
+		});
 	}
 }

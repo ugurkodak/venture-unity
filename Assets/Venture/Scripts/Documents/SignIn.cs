@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SignIn : MonoBehaviour {
-
+public class SignIn : MonoBehaviour
+{
 	Button signInButton;
 
 	void Awake()
@@ -43,11 +43,11 @@ public class SignIn : MonoBehaviour {
 							if (firebaseAuthTask.IsCompleted)
 							{
 								Venture.FirebaseUser = firebaseAuthTask.Result;
+								Venture.UserId = Venture.FirebaseUser.UserId; //TODO: There is a better way probably
 								Venture.Console.Print("Firebase authentication successfull.");
-
 								gameObject.GetComponentInChildren<Text>().text = "Success";
 								Document.Instance.Submit();
-								Character.Instance.SetupCharacterSession(Venture.FirebaseUser.UserId);
+								Character.Instance.SetupCharacterSession();
 							}
 							else
 							{
@@ -69,14 +69,13 @@ public class SignIn : MonoBehaviour {
 			}
 			catch
 			{
-				if (Venture.EDITOR)
-				{
-					gameObject.GetComponentInChildren<Text>().text = "DEBUG";
-					Document.Instance.Submit();
-					Character.Instance.SetupCharacterSession("12345");
-				}
-				else
-					Venture.Console.Print("Crashed while signing in.");
+#if UNITY_EDITOR
+				gameObject.GetComponentInChildren<Text>().text = "DEBUG";
+				Document.Instance.Submit();
+				Character.Instance.SetupCharacterSession();
+#else
+				Venture.Console.Print("Crashed while signing in.");
+#endif
 			}
 		}
 		else

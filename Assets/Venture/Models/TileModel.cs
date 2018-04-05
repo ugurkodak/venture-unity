@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileModel
+public class TileData : MonoBehaviour
 {
-    CityModel city;
-    Vector3 position;
-    bool isOccupied = false;
+	//string mapId;
+ //   float x;
+	//float y;
+	//float z;
 
-    public TileModel(CityModel city, Vector3 position)
-    {
-        this.city = city;
-        this.position = position;
-    }
+	//public TileModel()
+ //   {
+ //       this.city = city;
+ //       this.position = position;
+ //   }
 }

@@ -24,6 +24,7 @@ public class Console : MonoBehaviour
 
 	public void Print(string message)
 	{
+		print(message);
 		if (messages.Count > 50) //Output buffer 50
 			messages.RemoveAt(50);
 		messages.Insert(0, message);

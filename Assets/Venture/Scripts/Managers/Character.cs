@@ -3,8 +3,6 @@
 public class Character : MonoBehaviour
 {
 	public static Character Instance;
-
-	public string Id;
 	public string FirstName;
 	public string LastName;
 	public string WorldId;
@@ -19,41 +17,34 @@ public class Character : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 	}
 
-	public void SetupCharacterSession(string id)
+	public void SetupCharacterSession()
 	{
-		Venture.Database.Child("players").Child(id).GetValueAsync().ContinueWith(task =>
+		Venture.Database.Child("players").Child(Venture.UserId).GetValueAsync().ContinueWith(task =>
 		{
 			if (task.IsCompleted)
 			{
 				if (task.Result.Exists)
 				{
-					Instance.Id = id;
-					Instance.FirstName = task.Result.Child("firstName").Value as string;
-					Instance.LastName = task.Result.Child("lastName").Value as string;
-					Instance.WorldId = task.Result.Child("worldId").Value as string;
+					FirstName = task.Result.Child("FirstName").Value as string;
+					LastName = task.Result.Child("LastName").Value as string;
+					WorldId = task.Result.Child("WorldId").Value as string;
+					Venture.Console.Print("Character Session\n" + JsonUtility.ToJson(this));
 				}
 				else
-				{
-					Instance.Id = id;
 					Document.Instance.Open(Document.Instance.CharacterCreation);
-				}
 			}
 			else
 				Debug.Log("Error at SetupPlayerSession()");
 		});
 	}
 
-	public void CreateNewCharacterData(string id, string firstName, string lastName, string worldId)
+	public void CreateNewCharacterData()
 	{
-		Venture.Database.Child("players").Child(id).SetRawJsonValueAsync(JsonUtility.ToJson(this)).ContinueWith(task =>
+		Venture.Database.Child("players").Child(Venture.UserId)
+		.SetRawJsonValueAsync(JsonUtility.ToJson(this)).ContinueWith(task =>
 		{
 			if (task.IsCompleted)
-				Debug.Log("Created new user");
+				Venture.Console.Print("Registration successful.");
 		});
-	}
-
-	public void StartPlayerCreation(string id)
-	{
-		Debug.Log("Start player creation");
 	}
 }
