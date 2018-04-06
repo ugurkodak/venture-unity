@@ -3,15 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class World : MonoBehaviour
-{ 
+{
 
-	void Start()
-	{
-
-	}
-
-	void Update()
-	{
-
-	}
 }

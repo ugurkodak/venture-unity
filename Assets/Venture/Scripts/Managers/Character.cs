@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Character : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class Character : MonoBehaviour
 					FirstName = task.Result.Child("FirstName").Value as string;
 					LastName = task.Result.Child("LastName").Value as string;
 					WorldId = task.Result.Child("WorldId").Value as string;
-					Venture.Console.Print("Character Session\n" + JsonUtility.ToJson(this));
+					Venture.Instance.CreateWorldTiles();
 				}
 				else
 					Document.Instance.Open(Document.Instance.CharacterCreation);
@@ -44,7 +45,10 @@ public class Character : MonoBehaviour
 		.SetRawJsonValueAsync(JsonUtility.ToJson(this)).ContinueWith(task =>
 		{
 			if (task.IsCompleted)
+			{
 				Venture.Console.Print("Registration successful.");
+				Venture.Instance.CreateWorldTiles();
+			}
 		});
 	}
 }

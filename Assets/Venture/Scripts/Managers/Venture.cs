@@ -4,6 +4,7 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using Google;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Venture : MonoBehaviour
 {
@@ -43,5 +44,27 @@ public class Venture : MonoBehaviour
 	{
 		if (GoogleUser == null)
 			Document.Instance.Open(Document.Instance.SignIn);
+	}
+
+	//Size = floor(n^2/4)
+	public void CreateWorldTiles()
+	{
+		Database.Child("tiles").Child(Character.Instance.WorldId).GetValueAsync().ContinueWith(task =>
+		{
+			if (task.IsCompleted)
+			{
+				if (task.Result.Exists)
+				{
+					foreach (var position in task.Result.Children)
+					{
+						GameObject tile = new GameObject(position.Key);
+						tile.transform.position = new Vector3(
+						float.Parse((position.Value as IDictionary<string, object>)["x"].ToString()),
+						float.Parse((position.Value as IDictionary<string, object>)["y"].ToString()),
+						float.Parse((position.Value as IDictionary<string, object>)["z"].ToString()));
+					}
+				}
+			}
+		});
 	}
 }
