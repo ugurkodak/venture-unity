@@ -6,5 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Venture/LoginScene.unity
+    path: Assets/Venture/Scenes/Login.unity
     guid: 61e76bac98228bd49808685d3f707822
+  - enabled: 1
+    path: Assets/Venture/Scenes/World.unity
+    guid: d98be5a3057b8ae42801d3d7a6bf913e

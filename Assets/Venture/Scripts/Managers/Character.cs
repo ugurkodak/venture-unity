@@ -20,7 +20,7 @@ public class Character : MonoBehaviour
 
 	public void SetupCharacterSession()
 	{
-		Venture.Database.Child("players").Child(Venture.UserId).GetValueAsync().ContinueWith(task =>
+		Venture.Instance.Database.Child("players").Child(Venture.Instance.UserId).GetValueAsync().ContinueWith(task =>
 		{
 			if (task.IsCompleted)
 			{
@@ -29,7 +29,7 @@ public class Character : MonoBehaviour
 					FirstName = task.Result.Child("FirstName").Value as string;
 					LastName = task.Result.Child("LastName").Value as string;
 					WorldId = task.Result.Child("WorldId").Value as string;
-					Venture.Instance.CreateWorldTiles();
+					Venture.Instance.SwitchScene((int)Venture.Scenes.World);
 				}
 				else
 					Document.Instance.Open(Document.Instance.CharacterCreation);
@@ -41,13 +41,13 @@ public class Character : MonoBehaviour
 
 	public void CreateNewCharacterData()
 	{
-		Venture.Database.Child("players").Child(Venture.UserId)
+		Venture.Instance.Database.Child("players").Child(Venture.Instance.UserId)
 		.SetRawJsonValueAsync(JsonUtility.ToJson(this)).ContinueWith(task =>
 		{
 			if (task.IsCompleted)
 			{
-				Venture.Console.Print("Registration successful.");
-				Venture.Instance.CreateWorldTiles();
+				Venture.Instance.Console.Print("Registration successful.");
+				Venture.Instance.SwitchScene((int)Venture.Scenes.World);
 			}
 		});
 	}

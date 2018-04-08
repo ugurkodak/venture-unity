@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1548746148056458}
+  m_RootGameObject: {fileID: 1535852108345320}
   m_IsPrefabParent: 1
---- !u!1 &1548746148056458
+--- !u!1 &1535852108345320
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4559495984140950}
-  - component: {fileID: 114612031018673258}
+  - component: {fileID: 4456985965905502}
+  - component: {fileID: 114654295766289296}
   m_Layer: 0
-  m_Name: Document
+  m_Name: World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4559495984140950
+--- !u!4 &4456985965905502
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1548746148056458}
+  m_GameObject: {fileID: 1535852108345320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,20 +40,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114612031018673258
+--- !u!114 &114654295766289296
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1548746148056458}
+  m_GameObject: {fileID: 1535852108345320}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a37653e0dc2d08c4d9bf5616fab822d8, type: 3}
+  m_Script: {fileID: 11500000, guid: b554454ee17bf14418f6b757edd6cf66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Canvas: {fileID: 0}
-  SignIn: {fileID: 1327455632104108, guid: ed2af40fc799911488ddb5626808ddc2, type: 2}
-  CharacterCreation: {fileID: 1695394055680374, guid: c9f8540c830645e479025fb1d9439427,
-    type: 2}
-  Settings: {fileID: 0}
-  Character: {fileID: 0}
+  Tile: {fileID: 1739008455623160, guid: 9a5ee92097a49e64493a80130ff03238, type: 2}

@@ -24,7 +24,7 @@ public class Document : MonoBehaviour
 	public void Open(GameObject document)
 	{
 		current = Instantiate(document, Canvas.transform);
-		Venture.Console = current.GetComponentInChildren<Console>();
+		Venture.Instance.Console = current.GetComponentInChildren<Console>();
 		current.GetComponent<Animator>().SetTrigger("open");
 	}
 

@@ -14,3 +14,15 @@ List<string> worlds = new List<string>();
 foreach (var world in task.Result.Children)
 	worlds.Add((world.Value as IDictionary<string, object>)["name"] as string);
 dropdownWorld.AddOptions(worlds);
+
+## DATA MODELS ##
+Character
+WorldTile
+CityTile
+World
+City
+Building
+Company
+Material
+Product
+Worker

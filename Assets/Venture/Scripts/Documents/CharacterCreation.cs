@@ -16,13 +16,13 @@ public class CharacterCreation : MonoBehaviour
 		fieldLastName = transform.Find("Content").Find("Form").Find("FieldLastName").GetComponent<InputField>();
 		dropdownWorld = transform.Find("Content").Find("Form").Find("DropdownWorld").GetComponent<Dropdown>();
 		dropdownWorld.ClearOptions();
-		buttonSubmit.onClick.AddListener(onSubmit);
+		buttonSubmit.onClick.AddListener(OnSubmit);
 	}
 
 	void Start()
 	{
 		//Fill dropdown with available worlds
-		Venture.Database.Child("worlds").GetValueAsync().ContinueWith(task =>
+		Venture.Instance.Database.Child("worlds").GetValueAsync().ContinueWith(task =>
 		{
 			if (task.IsCompleted)
 			{
@@ -37,10 +37,11 @@ public class CharacterCreation : MonoBehaviour
 		});
 	}
 
-	void onSubmit()
+	void OnSubmit()
 	{
 		//TODO: Validate
-		Venture.Database.Child("worlds").OrderByChild("name").EqualTo(dropdownWorld.options[dropdownWorld.value].text)
+		Venture.Instance.Database.Child("worlds").OrderByChild("name")
+		.EqualTo(dropdownWorld.options[dropdownWorld.value].text)
 		.GetValueAsync().ContinueWith(task =>
 		{
 			if (task.IsCompleted)
