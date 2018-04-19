@@ -9,6 +9,7 @@ namespace Venture.Managers
 	Needs a complete rewrite*/
 	public class World : MonoBehaviour
 	{
+		Vector2 asd = new Vector2();
 		public static World Instance = null;
 		public MapTile Tile;
 		List<MapTile> tiles = new List<MapTile>();
@@ -22,43 +23,49 @@ namespace Venture.Managers
 				Destroy(gameObject);
 		}
 
-		private void TestRenderContinent(int size)
+		private void TestRenderContinent()
 		{
-			Data.Continent continent = new Data.Continent();
-			continent.Create("Region Name", size, 0, 0);
+			Data.Continent continent = new Data.Continent().Create();
+			GameObject ContinentGameObject = new GameObject(continent.Info.name);
+			ContinentGameObject.transform.position = continent.GetPivot();
 			Color color = new Color(1, 1, 1, 1);
-			foreach (Data.Region region in continent.GetRegions())
+			foreach (Data.Region region in continent.Regions)
 			{
-				color.a -= 0.1f;
-				foreach (Data.Tile tile in region.GetTiles())
+				GameObject RegionGameObject = new GameObject(region.Info.name);
+				RegionGameObject.transform.position = region.GetPivot();
+				RegionGameObject.transform.parent = ContinentGameObject.transform;
+				foreach (Data.Tile tile in region.Tiles)
 				{
 					MapTile newTile = Instantiate(Tile);
+					newTile.SetTileType(tile.sprite);
 					newTile.GetComponent<SpriteRenderer>().color = color;
-					newTile.transform.position = tile.GetPosition();
+					newTile.transform.position = new Vector3(tile.x, 0, tile.z);
+					newTile.transform.parent = RegionGameObject.transform;
 				}
+				color -= new Color(0.1f, 0.1f, 0.1f, 0);
 			}
 		}
 
-		private void TestRenderRegion(int size)
+		private void TestRenderRegion()
 		{
 			Data.Region region = new Data.Region().Create();
-			//GameObject RegionGameObject = new GameObject(region.getName(), );
-			foreach (Data.Tile tile in region.GetTiles())
+			GameObject RegionGameObject = new GameObject(region.Info.name);
+			RegionGameObject.transform.position = region.GetPivot();
+			foreach (Data.Tile tile in region.Tiles)
 			{
 				MapTile newTile = Instantiate(Tile);
-				newTile.transform.position = tile.GetPosition();
-				//newTile.transform.parent = 
+				newTile.SetTileType(tile.sprite);
+				newTile.transform.position = new Vector3(tile.x, 0, tile.z);
+				newTile.transform.parent = RegionGameObject.transform;
 			}
-			Debug.Log(region.GetAbsoluteCenter());
+			Debug.Log(region.GetPivot());
 		}
 
 		void Start()
 		{
 			//TESTS
-			//TestRenderContinent(4); //Continent with 4 regions
-			TestRenderRegion(7); //Region with floor((n^2)/4) tiles
-
-			//Region test
+			TestRenderContinent(); //Continent with 4 regions
+			//TestRenderRegion(); //Region with floor((n^2)/4) tiles
 
 
 			//Data.World world = new Data.World();

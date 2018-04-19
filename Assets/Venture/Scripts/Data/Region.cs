@@ -8,31 +8,35 @@ namespace Venture.Data
 	{
 		private const int min_size = 4, max_size = 10;
 
-		private int x, z, size;
-		private string name;
-		private List<Tile> tiles = new List<Tile>();
+		public MapAreaInfo Info { get; set; }
+		public List<Tile> Tiles { get; set; }
 
-		public Region() { }
-
-		public Region Create(int x = 0, int z = 0, int minSize = min_size, int maxSize = max_size, string name = "New Region")
+		public Region()
 		{
-			this.name = name;
-			this.x = x;
-			this.z = z;
-			size = (int)Mathf.Round(Random.Range(minSize, maxSize));
-			size = Mathf.Clamp(size, min_size, max_size);
+			Tiles = new List<Tile>();
+		}
+
+		public Region Create(int x = 0, int z = 0, 
+			int minSize = min_size, int maxSize = max_size, 
+			string name = "Unnamed Region")
+		{
+			Tiles = new List<Tile>();
+			Info = new MapAreaInfo(x, z, Mathf.Clamp(
+				(int)Mathf.Round(Random.Range(minSize, maxSize)),
+				min_size, max_size), name);
 
 			//Generate tile positions spirrally
 			//floor((n^2)/4) makes a square or neat rectangle
-			int tileCount = (int)Mathf.Floor(size * size * 0.25f);
+			int tileCount = (int)Mathf.Floor(Info.size * Info.size * 0.25f);
 			bool swap = false;
 			int direction = 1;
 			int steps = 1;
 			int remaininSteps = 1;
 			int turn = 2;
-
-			Tile tileZero = new Tile(x, z);
-			tiles.Add(tileZero);
+			
+			//Add tile 0 before looping
+			Tile tile = new Tile(x, z, TileSprite.Land, Direction.North);
+			Tiles.Add(tile);
 
 			for (int i = 1; i < tileCount; i++)
 			{
@@ -57,29 +61,20 @@ namespace Venture.Data
 					turn = 2;
 				}
 
-				tiles.Add(new Tile(x, z));
+				tile.Set(x, z, TileSprite.Land, Direction.North);
+				Tiles.Add(tile);
 			}
 
 			return this;
 		}
 
-		public string GetName()
-		{
-			return name;
-		}
-
-		public List<Tile> GetTiles()
-		{
-			return tiles;
-		}
-
 		public int GetWidth()
 		{
-			int xMax = (int)GetTiles()[0].GetPosition().x;
+			int xMax = Tiles[0].x;
 			int xMin = xMax;
-			foreach (Tile i in GetTiles())
+			foreach (Tile tile in Tiles)
 			{
-				int x = (int)i.GetPosition().x;
+				int x = tile.x;
 				if (x < xMin)
 					xMin = x;
 				if (x > xMax)
@@ -89,11 +84,11 @@ namespace Venture.Data
 		}
 		public int GetHeight()
 		{
-			int zMax = (int)GetTiles()[0].GetPosition().z;
+			int zMax = Tiles[0].z;
 			int zMin = zMax;
-			foreach (Tile i in GetTiles())
+			foreach (Tile tile in Tiles)
 			{
-				int z = (int)i.GetPosition().z;
+				int z = tile.z;
 				if (z < zMin)
 					zMin = z;
 				if (z > zMax)
@@ -102,12 +97,12 @@ namespace Venture.Data
 			return zMax - zMin + 1;
 		}
 
-		public Vector3 GetAbsoluteCenter()
+		public Vector3 GetPivot()
 		{
-			Vector3 center = new Vector3();
-			foreach (Tile tile in tiles)
-				center += tile.GetPosition();
-			return center / tiles.Count;
+			Vector3 pivot = new Vector3();
+			foreach (Tile tile in Tiles)
+				pivot += new Vector3(tile.x, 0, tile.z);
+			return pivot / Tiles.Count;
 		}
 	}
 }

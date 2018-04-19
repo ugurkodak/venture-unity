@@ -6,27 +6,34 @@ namespace Venture.Data
 {
 	public class Continent
 	{
-		string name;
-		int x, z, size;
-		List<Region> regions = new List<Region>();
+		private const int min_size = 4, max_size = 10;
 
-		public void Create(string name, int size, int x, int z)
+		public MapAreaInfo Info { get; set; }
+		public List<Region> Regions { get; set; }
+
+		public Continent()
 		{
-			this.name = name;
-			this.x = x;
-			this.z = z;
-			this.size = size;
+			Regions = new List<Region>();
+		}
+
+		public Continent Create(int x = 0, int z = 0,
+			int minSize = min_size, int maxSize = max_size,
+			string name = "Unnamed Continent")
+		{
+			Regions = new List<Region>();
+			Info = new MapAreaInfo(x, z, Mathf.Clamp(
+				(int)Mathf.Round(Random.Range(minSize, maxSize)),
+				min_size, max_size), name);
 
 			bool swap = false;
 			int direction = 1;
 			int steps = 1;
 			int remaininSteps = 1;
 			int turn = 2;
-
 			//Generate regions spirrally
-			for (int i = 1; i < size; i++)
+			for (int i = 1; i < Info.size; i++)
 			{
-				Region region = new Region().Create();
+				Region region = new Region().Create(x, z);
 
 				if (swap)
 					x = x + direction * region.GetWidth();
@@ -49,7 +56,7 @@ namespace Venture.Data
 					turn = 2;
 				}
 
-				regions.Add(region);
+				Regions.Add(region);
 			}
 
 			//for (int i = 0; i < numberOfRegions; i++)
@@ -61,11 +68,22 @@ namespace Venture.Data
 			//		regions.FindLast()
 			//	}
 			//}
+			return this;
 		}
 
-		public List<Region> GetRegions()
+		public Vector3 GetPivot()
 		{
-			return regions;
+			int tileCount = 0;
+			Vector3 pivot = new Vector3();
+			foreach (Region region in Regions)
+			{
+				foreach (Tile tile in region.Tiles)
+				{
+					pivot += new Vector3(tile.x, 0, tile.z);
+					tileCount++;
+				}
+			}
+			return pivot / tileCount;
 		}
 	}
 }

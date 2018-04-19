@@ -20,10 +20,10 @@ namespace Venture.Data
 			{
 				for (int x = 0; x < width; x++)
 				{
-					if (Mathf.PerlinNoise(x * scale, z * scale) < 0.5f)
-						tiles.Add(new Tile(x, z, TileSprite.Land));
-					else
-						tiles.Add(new Tile(x, z));
+					//if (Mathf.PerlinNoise(x * scale, z * scale) < 0.5f)
+						//tiles.Add(new Tile(x, z, TileSprite.Land));
+					//else
+					//	tiles.Add(new Tile(x, z));
 					//Debug.Log(Mathf.PerlinNoise(x * scale, z * scale));
 
 					//	Debug.Log(x * scale + ", " + z * scale + ": " + Mathf.PerlinNoise(width * scale, height * scale));
