@@ -22,25 +22,53 @@ namespace Venture.Managers
 				Destroy(gameObject);
 		}
 
-		void Start()
+		private void TestRenderContinent(int size)
 		{
-			//Data.Region region = new Data.Region();
-			//region.Create("Region Name", 0, 0, 6);
-			//Debug.Log(region.GetWidth());
-			//foreach (Data.Tile tile in region.GetTiles())
-			//{
-			//	MapTile newTile = Instantiate(Tile);
-			//	newTile.transform.position = tile.GetPosition();
-			//}
+			Data.Continent continent = new Data.Continent();
+			continent.Create("Region Name", size, 0, 0);
+			Color color = new Color(1, 1, 1, 1);
+			foreach (Data.Region region in continent.GetRegions())
+			{
+				color.a -= 0.1f;
+				foreach (Data.Tile tile in region.GetTiles())
+				{
+					MapTile newTile = Instantiate(Tile);
+					newTile.GetComponent<SpriteRenderer>().color = color;
+					newTile.transform.position = tile.GetPosition();
+				}
+			}
+		}
 
-			Data.World world = new Data.World();
-			world.Create(16, 8, 0.1f);
-			foreach (Data.Tile tile in world.GetTiles())
+		private void TestRenderRegion(int size)
+		{
+			Data.Region region = new Data.Region().Create();
+			//GameObject RegionGameObject = new GameObject(region.getName(), );
+			foreach (Data.Tile tile in region.GetTiles())
 			{
 				MapTile newTile = Instantiate(Tile);
-				newTile.SetTileType(tile.GetSprite());
 				newTile.transform.position = tile.GetPosition();
+				//newTile.transform.parent = 
 			}
+			Debug.Log(region.GetAbsoluteCenter());
+		}
+
+		void Start()
+		{
+			//TESTS
+			//TestRenderContinent(4); //Continent with 4 regions
+			TestRenderRegion(7); //Region with floor((n^2)/4) tiles
+
+			//Region test
+
+
+			//Data.World world = new Data.World();
+			//world.Create(16, 8, 0.1f);
+			//foreach (Data.Tile tile in world.GetTiles())
+			//{
+			//	MapTile newTile = Instantiate(Tile);
+			//	newTile.SetTileType(tile.GetSprite());
+			//	newTile.transform.position = tile.GetPosition();
+			//}
 			//GenerateAndRender(3);
 			//RenderFromData();
 		}
