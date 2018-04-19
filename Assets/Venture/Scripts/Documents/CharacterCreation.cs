@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Venture.Managers;
 
 public class CharacterCreation : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class CharacterCreation : MonoBehaviour
 	void Start()
 	{
 		//Fill dropdown with available worlds
-		Venture.Instance.Database.Child("worlds").GetValueAsync().ContinueWith(task =>
+		Game.Instance.DatabaseRootReference.Child("worlds").GetValueAsync().ContinueWith(task =>
 		{
 			if (task.IsCompleted)
 			{
@@ -40,7 +41,7 @@ public class CharacterCreation : MonoBehaviour
 	void OnSubmit()
 	{
 		//TODO: Validate
-		Venture.Instance.Database.Child("worlds").OrderByChild("name")
+		Game.Instance.DatabaseRootReference.Child("worlds").OrderByChild("name")
 		.EqualTo(dropdownWorld.options[dropdownWorld.value].text)
 		.GetValueAsync().ContinueWith(task =>
 		{
@@ -51,7 +52,7 @@ public class CharacterCreation : MonoBehaviour
 						Character.Instance.WorldId = world.Key;
 				Character.Instance.FirstName = fieldFirstName.text;
 				Character.Instance.LastName = fieldLastName.text;
-				Character.Instance.CreateNewCharacterData();
+				Character.Instance.CreateNewData();
 				Document.Instance.Submit();
 			}
 		});

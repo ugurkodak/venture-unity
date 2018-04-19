@@ -15,14 +15,20 @@ foreach (var world in task.Result.Children)
 	worlds.Add((world.Value as IDictionary<string, object>)["name"] as string);
 dropdownWorld.AddOptions(worlds);
 
-## DATA MODELS ##
+## DATA ##
 Character
-WorldTile
-CityTile
+Character
 World
 City
+WorldTile
+CityTile
+CityLot
+CityBlock
 Building
 Company
 Material
 Product
 Worker
+
+Tile >> Lot    >> Block     >> City
+Tile >> Region >> Continent >> World

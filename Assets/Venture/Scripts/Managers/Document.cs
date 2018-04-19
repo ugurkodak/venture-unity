@@ -1,40 +1,43 @@
 ﻿using UnityEngine;
 
-public class Document : MonoBehaviour
+namespace Venture.Managers
 {
-	public static Document Instance;
-	public GameObject Canvas;
-	public GameObject SignIn;
-	public GameObject CharacterCreation;
-	public GameObject Settings;
-	public GameObject Character;
-
-	GameObject current;
-
-	void Awake()
+	public class Document : MonoBehaviour
 	{
-		//Singleton
-		if (Instance == null)
-			Instance = this;
-		else if (Instance != this)
-			Destroy(gameObject);
-		DontDestroyOnLoad(gameObject);
-	}
+		public static Document Instance;
+		public GameObject Canvas;
+		public GameObject SignIn;
+		public GameObject CharacterCreation;
+		public GameObject Settings;
+		public GameObject Character;
 
-	public void Open(GameObject document)
-	{
-		current = Instantiate(document, Canvas.transform);
-		Venture.Instance.Console = current.GetComponentInChildren<Console>();
-		current.GetComponent<Animator>().SetTrigger("open");
-	}
+		GameObject current;
 
-	public void Submit()
-	{
-		current.GetComponent<Animator>().SetTrigger("submit");
-	}
+		void Awake()
+		{
+			//Singleton
+			if (Instance == null)
+				Instance = this;
+			else if (Instance != this)
+				Destroy(gameObject);
+			DontDestroyOnLoad(gameObject);
+		}
 
-	public void Discard()
-	{
-		current.GetComponent<Animator>().SetTrigger("discard");
+		public void Open(GameObject document)
+		{
+			current = Instantiate(document, Canvas.transform);
+			Game.Instance.Console = current.GetComponentInChildren<Console>();
+			current.GetComponent<Animator>().SetTrigger("open");
+		}
+
+		public void Submit()
+		{
+			current.GetComponent<Animator>().SetTrigger("submit");
+		}
+
+		public void Discard()
+		{
+			current.GetComponent<Animator>().SetTrigger("discard");
+		}
 	}
 }
