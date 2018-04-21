@@ -4,15 +4,10 @@ using UnityEngine;
 
 namespace Venture.Managers
 {
-	/*TODO: World sizes fixed until more functionality like resources, 
-	city areas and creating new cities.
-	Needs a complete rewrite*/
 	public class World : MonoBehaviour
 	{
-		Vector2 asd = new Vector2();
 		public static World Instance = null;
-		public MapTile Tile;
-		List<MapTile> tiles = new List<MapTile>();
+		public GameTile Tile;
 
 		void Awake()
 		{
@@ -36,9 +31,10 @@ namespace Venture.Managers
 				RegionGameObject.transform.parent = ContinentGameObject.transform;
 				foreach (Data.Tile tile in region.Tiles)
 				{
-					MapTile newTile = Instantiate(Tile);
+					GameTile newTile = Instantiate(Tile);
 					newTile.SetTileType(tile.sprite);
 					newTile.GetComponent<SpriteRenderer>().color = color;
+					Debug.Log(tile.x);
 					newTile.transform.position = new Vector3(tile.x, 0, tile.z);
 					newTile.transform.parent = RegionGameObject.transform;
 				}
@@ -53,7 +49,7 @@ namespace Venture.Managers
 			RegionGameObject.transform.position = region.GetPivot();
 			foreach (Data.Tile tile in region.Tiles)
 			{
-				MapTile newTile = Instantiate(Tile);
+				GameTile newTile = Instantiate(Tile);
 				newTile.SetTileType(tile.sprite);
 				newTile.transform.position = new Vector3(tile.x, 0, tile.z);
 				newTile.transform.parent = RegionGameObject.transform;
@@ -61,10 +57,27 @@ namespace Venture.Managers
 			Debug.Log(region.GetPivot());
 		}
 
+		private void TestRenderWorld()
+		{
+			Data.World world = new Data.World().Create(80, 40);
+			foreach (Data.Tile tile in world.Tiles)
+			{
+				GameTile newTile = Instantiate(Tile);
+				newTile.SetTileType(tile.sprite);
+				newTile.transform.position = new Vector3(tile.x, 0, tile.z);
+			}
+		}
+
+		void Update()
+		{
+			//foreach
+		}
+
 		void Start()
 		{
 			//TESTS
-			TestRenderContinent(); //Continent with 4 regions
+			TestRenderWorld(); //With 80*60 tiles;
+			//TestRenderContinent(); //Continent with 4 regions
 			//TestRenderRegion(); //Region with floor((n^2)/4) tiles
 
 

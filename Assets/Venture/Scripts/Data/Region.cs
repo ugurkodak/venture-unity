@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Venture.Data
@@ -8,26 +7,42 @@ namespace Venture.Data
 	{
 		private const int min_size = 4, max_size = 10;
 
-		public MapAreaInfo Info { get; set; }
-		public List<Tile> Tiles { get; set; }
+		public List<Tile> Tiles { get; private set; }
+
+		private MapAreaInfo info;
+		public MapAreaInfo Info
+		{
+			get { return info; }
+			set
+			{
+				foreach (Tile tile in Tiles)
+				{
+					//Debug.Log("Before: " + tile.x);
+					tile.Set(value.x - info.x + tile.x, +value.z - info.z + tile.z,
+						tile.direction, tile.sprite);
+					//Debug.Log("After: " + tile.x);
+				}
+				info = value;
+			}
+		}
 
 		public Region()
 		{
 			Tiles = new List<Tile>();
 		}
 
-		public Region Create(int x = 0, int z = 0, 
+		public Region Create(int x = 0, int z = 0,
 			int minSize = min_size, int maxSize = max_size, 
 			string name = "Unnamed Region")
 		{
 			Tiles = new List<Tile>();
-			Info = new MapAreaInfo(x, z, Mathf.Clamp(
+			info = new MapAreaInfo(x, z, Mathf.Clamp(
 				(int)Mathf.Round(Random.Range(minSize, maxSize)),
 				min_size, max_size), name);
 
 			//Generate tile positions spirrally
 			//floor((n^2)/4) makes a square or neat rectangle
-			int tileCount = (int)Mathf.Floor(Info.size * Info.size * 0.25f);
+			int tileCount = (int)Mathf.Floor(info.size * info.size * 0.25f);
 			bool swap = false;
 			int direction = 1;
 			int steps = 1;
@@ -35,7 +50,7 @@ namespace Venture.Data
 			int turn = 2;
 			
 			//Add tile 0 before looping
-			Tile tile = new Tile(x, z, TileSprite.Land, Direction.North);
+			Tile tile = new Tile(x, z, Direction.North, TileSprite.Land);
 			Tiles.Add(tile);
 
 			for (int i = 1; i < tileCount; i++)
@@ -61,7 +76,7 @@ namespace Venture.Data
 					turn = 2;
 				}
 
-				tile.Set(x, z, TileSprite.Land, Direction.North);
+				tile.Set(x, z, Direction.North, TileSprite.Land);
 				Tiles.Add(tile);
 			}
 

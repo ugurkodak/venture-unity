@@ -15,14 +15,6 @@
 			this.size = size;
 			this.name = name;
 		}
-
-		public void Set(int x, int z, int size, string name)
-		{
-			this.x = x;
-			this.z = z;
-			this.size = size;
-			this.name = name;
-		}
 	}
 
 	public struct Tile
@@ -32,7 +24,7 @@
 		public Direction direction;
 		public TileSprite sprite;
 
-		public Tile(int x, int z, TileSprite sprite, Direction direction)
+		public Tile(int x, int z, Direction direction, TileSprite sprite)
 		{
 			this.x = x;
 			this.z = z;
@@ -40,7 +32,7 @@
 			this.direction = direction;
 		}
 
-		public void Set(int x, int z, TileSprite sprite, Direction direction)
+		public void Set(int x, int z, Direction direction, TileSprite sprite)
 		{
 			this.x = x;
 			this.z = z;

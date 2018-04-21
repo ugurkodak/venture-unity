@@ -6,57 +6,35 @@ namespace Venture.Data
 {
 	public class World
 	{
+		const int width = 160, height = 80;
 		string name;
-		int width;
-		int height;
-		List<Tile> tiles = new List<Tile>();
-		List<Region> regions = new List<Region>();
-		List<Continent> continents = new List<Continent>();
+		public List<Tile> Tiles { get; private set; }
+		public List<Tile> Regions { get; private set; }
 
-		public void Create(int width, int height, float scale)
+		public World()
 		{
-			//float[,] noiseMap = new float[width, height];
+			Tiles = new List<Tile>();
+			Regions = new List<Tile>();
+		}
+
+		public World Create(int width = width, int height = height,
+			float seed = 0, float frequency = 0.06f, float landAmount = 0.4f)
+		{
+			float randomSeed = Random.value * 100;
+			if (seed != 0)
+				randomSeed = seed;
 			for (int z = 0; z < height; z++)
 			{
-				for (int x = 0; x < width; x++)
+				for (int x = 0; x < width ; x++)
 				{
-					//if (Mathf.PerlinNoise(x * scale, z * scale) < 0.5f)
-						//tiles.Add(new Tile(x, z, TileSprite.Land));
-					//else
-					//	tiles.Add(new Tile(x, z));
-					//Debug.Log(Mathf.PerlinNoise(x * scale, z * scale));
-
-					//	Debug.Log(x * scale + ", " + z * scale + ": " + Mathf.PerlinNoise(width * scale, height * scale));
-					//noiseMap[x, y] = Mathf.PerlinNoise(x * scale, y * scale);
-					//Debug.Log(noiseMap[x, y]);
-
-					//Debug.Log(Mathf.PerlinNoise(0.3f, 0.0f));
+					float value = Mathf.PerlinNoise(frequency * (x - 0.5f) + randomSeed, frequency * (z - 0.5f) + randomSeed);
+					if (value < landAmount)
+						Tiles.Add(new Tile(x, z, Direction.North, TileSprite.Land));
+					else
+						Tiles.Add(new Tile(x, z, Direction.North, TileSprite.Water));
 				}
 			}
-		}
-
-		public List<Tile> GetTiles()
-		{
-			return tiles;
+			return this;
 		}
 	}
-
-	//public class World
-	//{
-	//	string name;
-	//	int size;
-	//	int numberOfCharacters;
-
-	//	public World(int size, string name)
-	//	{
-	//		int height = size;
-	//		int width = size * 2;
-	//		int[,] tiles = new int[height, width];
-	//		//Add sprites
-	//		for (int i = 0; i < height; i++)
-	//		{
-	//			//int tiles = 
-	//		}	
-	//	}
-	//}
 }

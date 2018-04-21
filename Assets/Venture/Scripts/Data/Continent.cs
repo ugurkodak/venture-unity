@@ -25,49 +25,21 @@ namespace Venture.Data
 				(int)Mathf.Round(Random.Range(minSize, maxSize)),
 				min_size, max_size), name);
 
-			bool swap = false;
-			int direction = 1;
-			int steps = 1;
-			int remaininSteps = 1;
-			int turn = 2;
-			//Generate regions spirrally
+			Region regionZero = new Region().Create(x, z);
+			Regions.Add(regionZero);
 			for (int i = 1; i < Info.size; i++)
 			{
-				Region region = new Region().Create(x, z);
-
-				if (swap)
-					x = x + direction * region.GetWidth();
-				else
-					z = z + direction * region.GetHeight();
-				remaininSteps--;
-
-				if (remaininSteps == 0)
-				{
-					swap = !swap;
-					remaininSteps = steps;
-					turn--;
-				}
-
-				if (turn == 0)
-				{
-					direction = -direction;
-					steps++;
-					remaininSteps = steps;
-					turn = 2;
-				}
-
+				Region region = new Region().Create();
+				region.Info = new MapAreaInfo(i * 2, region.Info.z, region.Info.size, region.Info.name);
 				Regions.Add(region);
+
+				//Debug.Log("Previous: " + (Regions[i - 1].GetWidth() / 2));
+				//Debug.Log("Current: " + (region.GetWidth() / 2));
+				//region.Info = new MapAreaInfo((Regions[i - 1].GetWidth() / 2) + region.GetWidth() / 2,
+				//	region.Info.z, region.Info.size ,region.Info.name);
+				//Regions.Add(region);
 			}
 
-			//for (int i = 0; i < numberOfRegions; i++)
-			//{
-			//	Region newRegion = new Region();
-			//	newRegion.Create("region" + 1, x, z, 5);
-			//	foreach (Region region in regions)
-			//	{
-			//		regions.FindLast()
-			//	}
-			//}
 			return this;
 		}
 
@@ -87,3 +59,37 @@ namespace Venture.Data
 		}
 	}
 }
+
+////Generate regions spirrally
+//bool swap = false;
+//int direction = 1;
+//int steps = 1;
+//int remaininSteps = 1;
+//int turn = 2;
+
+//			for (int i = 0; i<Info.size; i++)
+//			{
+//				Region region = new Region().Create(x, z);
+//Regions.Add(region);
+
+//				if (swap)
+//					x = x + direction * region.GetWidth();
+//				else
+//					z = z + direction* region.GetHeight();
+//remaininSteps--;
+
+//				if (remaininSteps == 0)
+//				{
+//					swap = !swap;
+//					remaininSteps = steps;
+//					turn--;
+//				}
+
+//				if (turn == 0)
+//				{
+//					direction = -direction;
+//					steps++;
+//					remaininSteps = steps;
+//					turn = 2;
+//				}
+//			}

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Venture.Data;
 
-public class MapTile : MonoBehaviour {
+public class GameTile : MonoBehaviour {
 	SpriteRenderer spriteRenderer;
 
 	TileSprite tileType = TileSprite.Water;
