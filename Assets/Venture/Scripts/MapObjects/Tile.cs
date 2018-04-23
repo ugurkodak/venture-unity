@@ -5,9 +5,10 @@ namespace Venture.Prefabs
 {
 	public class Tile : MonoBehaviour
 	{
+		private Data.Tile data;
 		private SpriteRenderer spriteRenderer;
-
 		public Sprite Water, Land;
+
 		void Awake()
 		{
 			spriteRenderer = GetComponent<SpriteRenderer>();
@@ -15,6 +16,7 @@ namespace Venture.Prefabs
 
 		public void Render(Data.Tile data)
 		{
+			this.data = data;
 			transform.position = new Vector3(data.X, 0, data.Z);
 			//TODO: Set direction
 			switch (data.Sprite)
