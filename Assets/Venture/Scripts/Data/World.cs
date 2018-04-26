@@ -1,23 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Firebase.Database;
 
 namespace Venture.Data
 {
 	public class World
 	{
+		//TODO: Remove temporary database placeholders.
+		private List<string> worldNames = new List<string> { "Iptos", "Adarr", "Ixdar", "Lius"};
+
 		//World area needs must be perfectly divisible by region area
 		public const int Width = 40, Height = 20;
 		const int RegionWidth = 4, RegionHeight = 4;
 		const float frequency = 0.06f, landAmount = 0.4f;
 
-		public string Name { get; private set; }
-		public Region[] Regions { get; private set; }
-		public Tile[] Oceans { get; private set; }
-
-		public World()
-		{
-		}
+		[SerializeField]
+		private string name;
+		public string Name { get { return name; } private set { name = value; } }
+		[SerializeField]
+		private Region[] regions;
+		public Region[] Regions { get { return regions; } private set { regions = value; } }
+		[SerializeField]
+		private Tile[] oceans;
+		public Tile[] Oceans { get { return oceans; } private set { oceans = value; } }
 
 		public World Create()
 		{
@@ -55,7 +61,15 @@ namespace Venture.Data
 				}
 			Regions = regionFound.ToArray();
 			Oceans = oceanTiles.ToArray();
+
+			//TODO: Remove temporary database placeholders.
+			Name = worldNames[Random.Range(0, worldNames.Count)];
 			return this;
+		}
+
+		public void Write()
+		{
+			Debug.Log(JsonUtility.ToJson(this));
 		}
 	}
 }

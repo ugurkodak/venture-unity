@@ -1,6 +1,7 @@
 ﻿namespace Venture.Data
 {
 	public enum Direction { North, East, South, West };
+	public enum Resource { Agriculture, Mining}
 
 	public struct MapAreaInfo
 	{

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Venture.Data
 {
@@ -8,8 +6,12 @@ namespace Venture.Data
 	{
 		public enum TileSprite { Water, Land, Empty };
 
-		public int X { get; private set; }
-		public int Z { get; private set; }
+		[SerializeField]
+		private int x, z;
+		public int X { get { return x; } private set { x = value; } }
+		public int Z { get { return z; } private set { z = value; } }
+
+
 		public Direction Direction { get; set; }
 		public TileSprite Sprite { get; set; }
 
