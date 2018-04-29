@@ -5,88 +5,91 @@ using UnityEngine;
 using UnityEngine.UI;
 using Venture.Managers;
 
-public class SignIn : MonoBehaviour
+namespace Venture.Prefabs 
 {
-	Button signInButton;
-
-	void Awake()
+	public class SignIn : MonoBehaviour
 	{
-		signInButton = transform.Find("Content").Find("SignInButton").GetComponent<Button>();
-		signInButton.onClick.AddListener(onSignIn);
-	}
+		Button signInButton;
 
-	void Start()
-	{
-		signInButton.onClick.Invoke();
-	}
-
-	void onSignIn()
-	{
-		gameObject.GetComponentInChildren<Text>().text = "Signing In...";
-		gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Normal;
-		if (Game.Instance.GoogleUser == null)
+		void Awake()
 		{
-			try
-			{
-				//Google authentication
-				GoogleSignIn.DefaultInstance.SignIn().ContinueWith((Task<GoogleSignInUser> googleAuthTask) =>
-				{
-					if (googleAuthTask.IsCompleted)
-					{
-						Game.Instance.GoogleUser = googleAuthTask.Result;
-						Game.Instance.Console.Print("Google authentication successfull.");
-
-						//Firebase authentication
-						FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(
-							GoogleAuthProvider.GetCredential(Game.Instance.GoogleUser.IdToken, null))
-						.ContinueWith(firebaseAuthTask =>
-						{
-							if (firebaseAuthTask.IsCompleted)
-							{
-								Game.Instance.FirebaseUser = firebaseAuthTask.Result;
-								Game.Instance.UserId = Game.Instance.FirebaseUser.UserId; //TODO: There is a better way probably
-								Game.Instance.Console.Print("Firebase authentication successfull.");
-								gameObject.GetComponentInChildren<Text>().text = "Success";
-								Document.Instance.Submit();
-								Character.Instance.SetupSession();
-							}
-							else
-							{
-								Game.Instance.FirebaseUser = null;
-								gameObject.GetComponentInChildren<Text>().text = "Retry";
-								gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Bold;
-								Game.Instance.Console.Print("Firebase authentication failed.");
-							}
-						});
-					}
-					else
-					{
-						Game.Instance.GoogleUser = null;
-						gameObject.GetComponentInChildren<Text>().text = "Retry";
-						gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Bold;
-						Game.Instance.Console.Print("Google authentication failed.");
-					}
-				});
-			}
-			catch
-			{
-#if UNITY_EDITOR
-				gameObject.GetComponentInChildren<Text>().text = "DEBUG";
-				Document.Instance.Submit();
-				Character.Instance.SetupSession();
-#else
-				Venture.Instance.Console.Print("Crashed while signing in.");
-#endif
-			}
+			signInButton = transform.Find("Content").Find("SignInButton").GetComponent<Button>();
+			signInButton.onClick.AddListener(onSignIn);
 		}
-		else
+
+		void Start()
 		{
-			FirebaseAuth.DefaultInstance.SignOut();
-			GoogleSignIn.DefaultInstance.SignOut();
-			Game.Instance.GoogleUser = null;
-			Game.Instance.FirebaseUser = null;
-			gameObject.GetComponentInChildren<Text>().text = "Sign in";
-			Game.Instance.Console.Print("Signed out. Please sign in again.");
+			signInButton.onClick.Invoke();
+		}
+
+		void onSignIn()
+		{
+			gameObject.GetComponentInChildren<Text>().text = "Signing In...";
+			gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Normal;
+			if (Game.Instance.GoogleUser == null)
+			{
+				try
+				{
+					//Google authentication
+					GoogleSignIn.DefaultInstance.SignIn().ContinueWith((Task<GoogleSignInUser> googleAuthTask) =>
+					{
+						if (googleAuthTask.IsCompleted)
+						{
+							Game.Instance.GoogleUser = googleAuthTask.Result;
+							Game.Instance.Console.Print("Google authentication successfull.");
+
+							//Firebase authentication
+							FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(
+								GoogleAuthProvider.GetCredential(Game.Instance.GoogleUser.IdToken, null))
+							.ContinueWith(firebaseAuthTask =>
+							{
+								if (firebaseAuthTask.IsCompleted)
+								{
+									Game.Instance.FirebaseUser = firebaseAuthTask.Result;
+									Game.Instance.UserId = Game.Instance.FirebaseUser.UserId; //TODO: There is a better way probably
+									Game.Instance.Console.Print("Firebase authentication successfull.");
+									gameObject.GetComponentInChildren<Text>().text = "Success";
+									Document.Instance.Submit();
+									Character.Instance.SetupSession();
+								}
+								else
+								{
+									Game.Instance.FirebaseUser = null;
+									gameObject.GetComponentInChildren<Text>().text = "Retry";
+									gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Bold;
+									Game.Instance.Console.Print("Firebase authentication failed.");
+								}
+							});
+						}
+						else
+						{
+							Game.Instance.GoogleUser = null;
+							gameObject.GetComponentInChildren<Text>().text = "Retry";
+							gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Bold;
+							Game.Instance.Console.Print("Google authentication failed.");
+						}
+					});
+				}
+				catch
+				{
+#if UNITY_EDITOR
+					gameObject.GetComponentInChildren<Text>().text = "DEBUG";
+					Document.Instance.Submit();
+					Character.Instance.SetupSession();
+#else
+					Venture.Instance.Console.Print("Crashed while signing in.");
+#endif
+				}
+			}
+			else
+			{
+				FirebaseAuth.DefaultInstance.SignOut();
+				GoogleSignIn.DefaultInstance.SignOut();
+				Game.Instance.GoogleUser = null;
+				Game.Instance.FirebaseUser = null;
+				gameObject.GetComponentInChildren<Text>().text = "Sign in";
+				Game.Instance.Console.Print("Signed out. Please sign in again.");
+			}
 		}
 	}
 }

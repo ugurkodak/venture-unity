@@ -5,6 +5,7 @@ using Firebase.Database;
 
 namespace Venture.Data
 {
+	[System.Serializable]
 	public class World
 	{
 		//TODO: Remove temporary database placeholders.
@@ -69,7 +70,14 @@ namespace Venture.Data
 
 		public void Write()
 		{
-			Debug.Log(JsonUtility.ToJson(this));
+			//TODO: Split tile data to seperate document
+			Access.Root.Child("worlds").Push().SetRawJsonValueAsync(JsonUtility.ToJson(this)).ContinueWith(task => 
+			{
+				if (task.IsCompleted)
+					Debug.Log("New world saved.");
+				else
+					Debug.Log("Problem occured while saving the world.");
+			});
 		}
 	}
 }

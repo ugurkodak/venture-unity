@@ -2,6 +2,7 @@
 
 namespace Venture.Data
 {
+	[System.Serializable]
 	public class Tile
 	{
 		public enum TileSprite { Water, Land, Empty };
@@ -10,7 +11,6 @@ namespace Venture.Data
 		private int x, z;
 		public int X { get { return x; } private set { x = value; } }
 		public int Z { get { return z; } private set { z = value; } }
-
 
 		public Direction Direction { get; set; }
 		public TileSprite Sprite { get; set; }

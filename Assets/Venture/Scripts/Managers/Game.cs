@@ -1,7 +1,4 @@
-﻿using Firebase;
-using Firebase.Auth;
-using Firebase.Database;
-using Firebase.Unity.Editor;
+﻿using Firebase.Auth;
 using Google;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,7 +11,6 @@ namespace Venture.Managers
 		public Console Console = null;
 		public GoogleSignInUser GoogleUser = null;
 		public FirebaseUser FirebaseUser = null;
-		public DatabaseReference DatabaseRootReference;
 		public string UserId = "123456789"; //TODO: There is a better way probably
 
 		public enum Scenes : int { Login, World, City };
@@ -35,14 +31,6 @@ namespace Venture.Managers
 				RequestIdToken = true,
 				UseGameSignIn = false
 			};
-
-			//UNITY_EDITOR User 
-			FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://venture-196117.firebaseio.com/");
-			FirebaseApp.DefaultInstance.SetEditorP12FileName("Venture-9af379c14c56.p12");
-			FirebaseApp.DefaultInstance.SetEditorServiceAccountEmail("venture-196117@appspot.gserviceaccount.com");
-			FirebaseApp.DefaultInstance.SetEditorP12Password("notasecret");
-
-			DatabaseRootReference = FirebaseDatabase.DefaultInstance.RootReference;
 		}
 
 		void Start()

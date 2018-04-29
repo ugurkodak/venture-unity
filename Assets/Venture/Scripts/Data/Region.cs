@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Venture.Data
 {
+	[System.Serializable]
 	public class Region
 	{
 		//TODO: Remove temporary database placeholders.

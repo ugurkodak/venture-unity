@@ -21,7 +21,7 @@ namespace Venture.Managers
 		void Start()
 		{
 			Render(new Data.World().Create());
-			data.Write();
+			//data.Write();
 		}
 
 		public void Render(Data.World data)

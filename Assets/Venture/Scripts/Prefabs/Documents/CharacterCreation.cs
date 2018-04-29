@@ -3,58 +3,61 @@ using UnityEngine;
 using UnityEngine.UI;
 using Venture.Managers;
 
-public class CharacterCreation : MonoBehaviour
+namespace Venture.Prefabs
 {
-	Button buttonSubmit;
-	InputField fieldFirstName;
-	InputField fieldLastName;
-	Dropdown dropdownWorld;
-
-	void Awake()
+	public class CharacterCreation : MonoBehaviour
 	{
-		buttonSubmit = transform.Find("Content").Find("ButtonSubmit").GetComponent<Button>();
-		fieldFirstName = transform.Find("Content").Find("Form").Find("FieldFirstName").GetComponent<InputField>();
-		fieldLastName = transform.Find("Content").Find("Form").Find("FieldLastName").GetComponent<InputField>();
-		dropdownWorld = transform.Find("Content").Find("Form").Find("DropdownWorld").GetComponent<Dropdown>();
-		dropdownWorld.ClearOptions();
-		buttonSubmit.onClick.AddListener(OnSubmit);
-	}
+		Button buttonSubmit;
+		InputField fieldFirstName;
+		InputField fieldLastName;
+		Dropdown dropdownWorld;
 
-	void Start()
-	{
-		//Fill dropdown with available worlds
-		Game.Instance.DatabaseRootReference.Child("worlds").GetValueAsync().ContinueWith(task =>
+		void Awake()
 		{
-			if (task.IsCompleted)
+			buttonSubmit = transform.Find("Content").Find("ButtonSubmit").GetComponent<Button>();
+			fieldFirstName = transform.Find("Content").Find("Form").Find("FieldFirstName").GetComponent<InputField>();
+			fieldLastName = transform.Find("Content").Find("Form").Find("FieldLastName").GetComponent<InputField>();
+			dropdownWorld = transform.Find("Content").Find("Form").Find("DropdownWorld").GetComponent<Dropdown>();
+			dropdownWorld.ClearOptions();
+			buttonSubmit.onClick.AddListener(OnSubmit);
+		}
+
+		void Start()
+		{
+			//Fill dropdown with available worlds
+			Data.Access.Root.Child("worlds").GetValueAsync().ContinueWith(task =>
 			{
-				if (task.Result.Exists)
+				if (task.IsCompleted)
 				{
-					List<string> worlds = new List<string>();
-					foreach (var world in task.Result.Children)
-						worlds.Add((world.Value as IDictionary<string, object>)["name"] as string);
-					dropdownWorld.AddOptions(worlds);
+					if (task.Result.Exists)
+					{
+						List<string> worlds = new List<string>();
+						foreach (var world in task.Result.Children)
+							worlds.Add((world.Value as IDictionary<string, object>)["name"] as string);
+						dropdownWorld.AddOptions(worlds);
+					}
 				}
-			}
-		});
-	}
+			});
+		}
 
-	void OnSubmit()
-	{
-		//TODO: Validate
-		Game.Instance.DatabaseRootReference.Child("worlds").OrderByChild("name")
-		.EqualTo(dropdownWorld.options[dropdownWorld.value].text)
-		.GetValueAsync().ContinueWith(task =>
+		void OnSubmit()
 		{
-			if (task.IsCompleted)
+			//TODO: Validate
+			Data.Access.Root.Child("worlds").OrderByChild("name")
+			.EqualTo(dropdownWorld.options[dropdownWorld.value].text)
+			.GetValueAsync().ContinueWith(task =>
 			{
-				if (task.Result.Exists)
-					foreach (var world in task.Result.Children)
-						Character.Instance.WorldId = world.Key;
-				Character.Instance.FirstName = fieldFirstName.text;
-				Character.Instance.LastName = fieldLastName.text;
-				Character.Instance.CreateNewData();
-				Document.Instance.Submit();
-			}
-		});
+				if (task.IsCompleted)
+				{
+					if (task.Result.Exists)
+						foreach (var world in task.Result.Children)
+							Character.Instance.WorldId = world.Key;
+					Character.Instance.FirstName = fieldFirstName.text;
+					Character.Instance.LastName = fieldLastName.text;
+					Character.Instance.CreateNewData();
+					Document.Instance.Submit();
+				}
+			});
+		}
 	}
 }

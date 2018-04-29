@@ -21,7 +21,7 @@ namespace Venture.Managers
 
 		public void SetupSession()
 		{
-			Game.Instance.DatabaseRootReference.Child("players").Child(Game.Instance.UserId).GetValueAsync().ContinueWith(task =>
+			Data.Access.Root.Child("players").Child(Game.Instance.UserId).GetValueAsync().ContinueWith(task =>
 			{
 				if (task.IsCompleted)
 				{
@@ -42,7 +42,7 @@ namespace Venture.Managers
 
 		public void CreateNewData()
 		{
-			Game.Instance.DatabaseRootReference.Child("players").Child(Game.Instance.UserId)
+			Data.Access.Root.Child("players").Child(Game.Instance.UserId)
 			.SetRawJsonValueAsync(JsonUtility.ToJson(this)).ContinueWith(task =>
 			{
 				if (task.IsCompleted)
