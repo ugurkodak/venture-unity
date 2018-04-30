@@ -2,11 +2,12 @@
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using UnityEngine;
+using System;
 
 namespace Venture.Data
 {
 	public enum Direction { North, East, South, West };
-	public enum Resource { Agriculture, Mining}
+	public enum Resource { Agriculture, Mining};
 
 	public static class Access
 	{

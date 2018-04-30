@@ -21,13 +21,14 @@ namespace Venture.Managers
 		void Start()
 		{
 			Render(new Data.World().Create());
-			//data.Write();
+			data.Write();
+			//data.Read();
 		}
 
 		public void Render(Data.World data)
 		{
 			this.data = data;
-			name = data.Name;
+			name = data.Meta.Name;
 			foreach (Data.Region region in data.Regions)
 				Prefabs.Region.Render(region, Tile, transform);
 			foreach (Data.Tile tile in data.Oceans)

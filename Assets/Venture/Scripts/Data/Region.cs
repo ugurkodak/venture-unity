@@ -25,7 +25,6 @@ namespace Venture.Data
 		{
 			//TODO: Remove temporary database placeholders.
 			Name = regionNames[Random.Range(0, regionNames.Count - 1)];
-
 			Tiles = new Tile[size];
 		}
 
