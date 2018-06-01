@@ -14,7 +14,7 @@ namespace Venture.Prefabs
 		void Awake()
 		{
 			signInButton = transform.Find("Content").Find("SignInButton").GetComponent<Button>();
-			signInButton.onClick.AddListener(onSignIn);
+			signInButton.onClick.AddListener(OnSignIn);
 		}
 
 		void Start()
@@ -22,7 +22,7 @@ namespace Venture.Prefabs
 			signInButton.onClick.Invoke();
 		}
 
-		void onSignIn()
+		void OnSignIn()
 		{
 			gameObject.GetComponentInChildren<Text>().text = "Signing In...";
 			gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Normal;
@@ -46,7 +46,6 @@ namespace Venture.Prefabs
 								if (firebaseAuthTask.IsCompleted)
 								{
 									Game.Instance.FirebaseUser = firebaseAuthTask.Result;
-									Game.Instance.UserId = Game.Instance.FirebaseUser.UserId; //TODO: There is a better way probably
 									Game.Instance.Console.Print("Firebase authentication successfull.");
 									gameObject.GetComponentInChildren<Text>().text = "Success";
 									Document.Instance.Submit();

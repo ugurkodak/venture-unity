@@ -12,14 +12,10 @@ namespace Venture.Data
 			"Efleutan", "Fastairia", "Ugria", "Judrein", "Broylor",
 			"Skiytho", "Ufra", "Ablal", "Bleuc Flines", "Sneow Spein" };
 
-		[SerializeField]
-		private string name;
-		public string Name { get { return name; } private set { name = value; } }
-		[SerializeField]
-		private Tile[] tiles;
-		public Tile[] Tiles { get { return tiles; } set { tiles = value; } }
-		//public bool IsCity { get; private set; }
-		//public Resource[] Resources { get; private set; }
+		public string Name { get; private set; }
+		public Tile[] Tiles { get; set; }
+		//TODO: public bool HasCity { get; private set; }
+		//TODO: public Resource[] Resources { get; private set; }
 
 		public Region(int size)
 		{

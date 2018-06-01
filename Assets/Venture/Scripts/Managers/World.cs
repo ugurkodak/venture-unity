@@ -20,9 +20,11 @@ namespace Venture.Managers
 
 		void Start()
 		{
+			//TODO: Read world data acording to character worldID
 			Render(new Data.World().Create());
-			data.Write();
-			//data.Read();
+			//data.Write();
+			//data = new Data.World();
+			//data.Read("-LBNqPJ7lz0uqUEx53_f");
 		}
 
 		public void Render(Data.World data)

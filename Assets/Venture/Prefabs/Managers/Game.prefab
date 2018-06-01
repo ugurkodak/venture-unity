@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4886028122774372}
   - component: {fileID: 114147651618936114}
   m_Layer: 0
-  m_Name: Venture
+  m_Name: Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,3 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507b1254ab58d5a4e8c6fbb7d71874a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Console: {fileID: 0}
+  UserId: 123456789

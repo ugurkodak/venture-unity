@@ -12,6 +12,8 @@ namespace Venture.Prefabs
 		InputField fieldLastName;
 		Dropdown dropdownWorld;
 
+		List<string> worldIds = new List<string>();
+
 		void Awake()
 		{
 			buttonSubmit = transform.Find("Content").Find("ButtonSubmit").GetComponent<Button>();
@@ -24,40 +26,42 @@ namespace Venture.Prefabs
 
 		void Start()
 		{
-			//Fill dropdown with available worlds
-			Data.Access.Root.Child("worlds").GetValueAsync().ContinueWith(task =>
+			//Read all worlds meta and fill dropdown with names
+			Data.Access.Root.Child("worlds/meta").GetValueAsync().ContinueWith(worlds =>
 			{
-				if (task.IsCompleted)
+				if (worlds.IsCompleted && worlds.Exception == null && worlds.Result.Exists)
 				{
-					if (task.Result.Exists)
+					List<string> names = new List<string>();
+					
+					foreach (var world in worlds.Result.Children)
 					{
-						List<string> worlds = new List<string>();
-						foreach (var world in task.Result.Children)
-							worlds.Add((world.Value as IDictionary<string, object>)["name"] as string);
-						dropdownWorld.AddOptions(worlds);
+						names.Add(world.Child("Name").Value.ToString());
+						worldIds.Add(world.Key);
 					}
+					dropdownWorld.AddOptions(names);
 				}
+				else
+					Debug.Log("Fail: Could't read world names");
 			});
 		}
 
 		void OnSubmit()
 		{
 			//TODO: Validate
-			Data.Access.Root.Child("worlds").OrderByChild("name")
-			.EqualTo(dropdownWorld.options[dropdownWorld.value].text)
-			.GetValueAsync().ContinueWith(task =>
-			{
-				if (task.IsCompleted)
-				{
-					if (task.Result.Exists)
-						foreach (var world in task.Result.Children)
-							Character.Instance.WorldId = world.Key;
-					Character.Instance.FirstName = fieldFirstName.text;
-					Character.Instance.LastName = fieldLastName.text;
-					Character.Instance.CreateNewData();
-					Document.Instance.Submit();
-				}
-			});
+			//TODO: Check how many players are registered in the world and either lock it down or
+			//create new city.
+			Character.Instance.data.Create(
+				fieldFirstName.text,
+				fieldLastName.text,
+				worldIds[dropdownWorld.value],
+#if UNITY_EDITOR 
+				Game.Instance.DEBUG_USER_ID)
+#else
+				Game.Instance.FirebaseUser.UserId)
+#endif
+				.Write();
+			Character.Instance.SetupSession();
+
 		}
 	}
 }

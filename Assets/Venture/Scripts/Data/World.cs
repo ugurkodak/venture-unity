@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Firebase.Database;
 using System;
+using Newtonsoft.Json;
 
 namespace Venture.Data
 {
-	[Serializable]
 	public class World
 	{
 		//TODO: Remove temporary database placeholders.
@@ -14,34 +13,18 @@ namespace Venture.Data
 
 		//World area needs must be perfectly divisible by region area
 		//TODO: Maybe make it configurible
-		public const int Width = 40, Height = 20;
+		const int Width = 40, Height = 20;
 		const int RegionWidth = 4, RegionHeight = 4;
 		const float frequency = 0.06f, landAmount = 0.4f;
 
-		[Serializable]
 		public class WorldMeta
 		{
-			[SerializeField]
-			private string name;
-			[SerializeField]
-			private long startDate, endDate; //Converted to DateTime via property to be able to serialize
-			[SerializeField]
-			private int characterCount;
+			public string Name { get; private set; }
+			public DateTime StartDate { get; private set; }
+			public DateTime EndDate { get; private set; }
+			public int CharacterCount { get; set; }
 			//TODO: private int cityCount;
 			//TODO: private bool active;
-
-			public string Name { get { return name; } set { name = value; } }
-			public DateTime StartDate
-			{
-				get { return DateTime.FromFileTimeUtc(startDate); }
-				set { startDate = value.ToFileTimeUtc(); }
-			}
-			public DateTime EndDate
-			{
-				get { return DateTime.FromFileTimeUtc(endDate); }
-				set { endDate = value.ToFileTimeUtc(); }
-			}
-			public int CharacterCount { get { return characterCount; } set { characterCount = value; } }
 
 			public WorldMeta(string name, int hours)
 			{
@@ -52,17 +35,10 @@ namespace Venture.Data
 			}
 		}
 
-		[SerializeField]
-		private WorldMeta meta;
-		[SerializeField]
-		private Region[] regions;
-		[SerializeField]
-		private Tile[] oceans;
-
-		public WorldMeta Meta { get { return meta; } private set { meta = value; } }
+		public WorldMeta Meta { get; private set; }
 		//TODO: Check if using arrays can cause problem
-		public Region[] Regions { get { return regions; } private set { regions = value; } }
-		public Tile[] Oceans { get { return oceans; } private set { oceans = value; } }
+		public Region[] Regions { get; private set; }
+		public Tile[] Oceans { get; private set; }
 
 		public World Create()
 		{
@@ -107,19 +83,51 @@ namespace Venture.Data
 
 		public void Read(string Id)
 		{
-			//TODO: Split tile data to seperate document. (Maybe not?)
-			//Access.Root.Child("worlds").Child(Id + "/meta").
+			Access.Root.Child("worlds/" + Id).GetValueAsync().ContinueWith(task =>
+			{
+				if (task.IsCompleted)
+				{
+					DataSnapshot snapshot = task.Result;
+					Debug.Log(snapshot.Value);
+				}
+				else
+					Debug.Log("Problem occured while reading the world.");
+			});
 		}
 
 		public void Write()
 		{
-			//TODO: Split tile data to seperate document
-			Access.Root.Child("worlds").Push().SetRawJsonValueAsync(JsonUtility.ToJson(this)).ContinueWith(task =>
+			string id = Access.Root.Child("worlds/meta").Push().Key;
+			Access.Root.Child("worlds/meta/" + id)
+			.SetRawJsonValueAsync(JsonConvert.SerializeObject(Meta))
+			.ContinueWith(meta =>
 			{
-				if (task.IsCompleted)
-					Debug.Log("New world saved.");
+				if (meta.IsCompleted && meta.Exception == null)
+				{
+					Debug.Log("Success: World meta wrote.");
+					Access.Root.Child("worlds/raw/" + id + "/regions")
+					.SetRawJsonValueAsync(JsonConvert.SerializeObject(Regions))
+					.ContinueWith(regions =>
+					{
+						if (regions.IsCompleted && regions.Exception == null)
+						{
+							Debug.Log("Success: World regions wrote.");
+							Access.Root.Child("worlds/raw/" + id + "/oceans")
+							.SetRawJsonValueAsync(JsonConvert.SerializeObject(Oceans))
+							.ContinueWith(oceans =>
+							{
+								if (oceans.IsCompleted && oceans.Exception == null)
+									Debug.Log("Success: World oceans wrote.");
+								else
+									Debug.Log(oceans.Exception);
+							});
+						}
+						else
+							Debug.Log(regions.Exception);
+					});
+				}
 				else
-					Debug.Log("Problem occured while saving the world.");
+					Debug.Log("META: " + meta.Exception);
 			});
 		}
 	}

@@ -10,8 +10,8 @@ namespace Venture.Managers
 		public static Game Instance = null;
 		public Console Console = null;
 		public GoogleSignInUser GoogleUser = null;
-		public FirebaseUser FirebaseUser = null;
-		public string UserId = "123456789"; //TODO: There is a better way probably
+		public FirebaseUser FirebaseUser = null; //This is used for character setup(authorization)
+		public string DEBUG_USER_ID = "123456789";
 
 		public enum Scenes : int { Login, World, City };
 		Scenes scene = Scenes.Login;
@@ -39,7 +39,7 @@ namespace Venture.Managers
 				Document.Instance.Open(Document.Instance.SignIn);
 		}
 
-		public void SwitchScene(int scene)
+		public void LoadScene(int scene)
 		{
 			switch (scene)
 			{

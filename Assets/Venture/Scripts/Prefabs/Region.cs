@@ -7,7 +7,6 @@ namespace Venture.Prefabs
 	public class Region : MonoBehaviour
 	{
 		//private Data.Region data;
-
 		public static Region Render(Data.Region data, Tile tilePrefab, Transform parent)
 		{
 			Region region = new GameObject().AddComponent<Region>(); //Fake prefab
