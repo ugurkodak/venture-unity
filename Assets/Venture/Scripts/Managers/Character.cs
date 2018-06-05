@@ -22,7 +22,7 @@ namespace Venture.Managers
 		{
 			Venture.Data.Access.Root.Child("characters")
 			.OrderByChild("UserId")
-			.EqualTo(User.Instance.Data.CharacterId)
+			.EqualTo(User.Instance.Data.ActiveCharacterId)
 			.GetValueAsync()
 			.ContinueWith(task => 
 			{

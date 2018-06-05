@@ -11,8 +11,8 @@ namespace Venture.Data
 
 	public static class Access
 	{
+		public const string DATE_TIME_FORMAT = "yyyymmddhhmm";
 		public static DatabaseReference Root;
-		public const string DATE_TIME_FORMAT = "yyyymmddhhmm"; 
 
 		static Access()
 		{

@@ -9,43 +9,66 @@ namespace Venture.Data
 	public class User
 	{
 		public const string UNITY_EDITOR_USER_ID = "123456789";
+		private readonly string id;
+		public string JoinDate { get; private set; }
 		//User can only have one active character but abandoned 
 		//characters persist in simulation until the world end date
-		public string CharacterId { get; private set; }
-		public string JoinDate { get; private set; }
+		public string ActiveCharacterId { get; private set; }
+		public string LastLogin { get; private set; }
 		//TODO: User stats
 
-		public async void Create(string id, string characterId)
+		public User(string id)
 		{
-			CharacterId = characterId;
-			JoinDate = DateTime.Now.ToString(Access.DATE_TIME_FORMAT);
+			this.id = id;
+		}
+
+		public async void Create()
+		{
+			var user = await Access.Root.Child("users/" + id).GetValueAsync();
+			if (!user.Exists)
+			{
+				JoinDate = DateTime.Now.ToString(Access.DATE_TIME_FORMAT);
+				Update();
+				Debug.Log("New user.");
+			}
+			else
+				Debug.LogError("User already exists.");
+		}
+
+		public async void Update()
+		{
 			await Access.Root.Child("users/" + id)
 			.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
 		}
 
-		public void Create(string id)
+		public async void Read()
 		{
-			Create(id, null);
-		}
-
-		public async void Read(string id)
-		{
-			Debug.Log(JoinDate);
-
 			var user = await Access.Root.Child("users/" + id).GetValueAsync();
-			JoinDate = user.Child("JoinDate").GetRawJsonValue();
-
-			Debug.Log(JoinDate);
-		}
-
-		public void Update()
-		{
-
+			if (user.Exists)
+			{
+				ActiveCharacterId = user.Child("ActiveCharacterId").GetRawJsonValue();
+				JoinDate = user.Child("JoinDate").GetRawJsonValue();
+				LastLogin = user.Child("LastLogin").GetRawJsonValue();
+			}
+			else
+				Debug.LogError("User doesn't exist.");
 		}
 
 		public void Delete()
 		{
 
+		}
+
+		public void UpdateActiveCharacter(string characterId)
+		{
+			ActiveCharacterId = characterId;
+			Update();
+		}
+
+		public void UpdateLastLogin()
+		{
+			LastLogin = DateTime.Now.ToString(Data.Access.DATE_TIME_FORMAT);
+			Update();
 		}
 	}
 }
@@ -70,7 +93,7 @@ namespace Venture.Managers //TODO: Move file into managers and create a manager 
 
 			GoogleUser = null;
 			FirebaseUser = null;
-			Data = new Data.User();
+			Data = new Data.User(Venture.Data.User.UNITY_EDITOR_USER_ID); //TODO: Remove
 
 			GoogleSignIn.Configuration = new GoogleSignInConfiguration
 			{
@@ -82,9 +105,8 @@ namespace Venture.Managers //TODO: Move file into managers and create a manager 
 
 		private void Start()
 		{
-			//Data.Create(Venture.Data.User.UNITY_EDITOR_USER_ID);
-			Data.Read(Venture.Data.User.UNITY_EDITOR_USER_ID);
-			
+			Data.Create();
+			//Data.Pull(Venture.Data.User.UNITY_EDITOR_USER_ID);
 		}
 
 		public async void SignIn(Action continuation)
@@ -92,6 +114,7 @@ namespace Venture.Managers //TODO: Move file into managers and create a manager 
 			Instance.GoogleUser = await GoogleSignIn.DefaultInstance.SignIn();
 			Instance.FirebaseUser = await FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(
 				GoogleAuthProvider.GetCredential(Instance.GoogleUser.IdToken, null));
+			Data.UpdateLastLogin();
 			continuation();
 		}
 
