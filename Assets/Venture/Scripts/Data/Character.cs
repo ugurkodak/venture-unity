@@ -11,7 +11,7 @@ namespace Venture.Data
 		public string LastName { get; private set; }
 		public string WorldId { get; private set; }
 		public string UserId { get; private set; }
-		//TODO: public bool Active { get; private set; } //What happens if user leaves the world?
+		public bool Active { get; private set; }
 
 		public Character Create(string firstName, string lastName, string worldId, string userId)
 		{
@@ -36,19 +36,27 @@ namespace Venture.Data
 		}
 		public void Read(string characterId)
 		{
+			Debug.Log(characterId);
 			Access.Root.Child("characters/" + characterId)
 			.GetValueAsync().ContinueWith(character => 
 			{
 				if (character.IsCompleted && character.Exception == null)
 				{
 					FirstName = character.Result.Child("FirstName").ToString();
-					FirstName = character.Result.Child("LastName").ToString();
-					FirstName = character.Result.Child("WorldId").ToString();
-					FirstName = character.Result.Child("UserId").ToString();
+					LastName = character.Result.Child("LastName").ToString();
+					WorldId = character.Result.Child("WorldId").ToString();
+					UserId = character.Result.Child("UserId").ToString();
+					Debug.Log(FirstName);
 				}
 				else
 					Debug.Log("Failed: Couldn't read character.");
 			});
+		}
+
+		//Reads the active character of the user (A user can have only one active character).
+		public void ReadActive(string userId)
+		{
+
 		}
 
 	}

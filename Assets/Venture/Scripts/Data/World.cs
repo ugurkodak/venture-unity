@@ -19,7 +19,7 @@ namespace Venture.Data
 
 		public class WorldMeta
 		{
-			public string Name { get; private set; }
+			public string Name { get; set; }
 			public DateTime StartDate { get; private set; }
 			public DateTime EndDate { get; private set; }
 			public int CharacterCount { get; set; }
@@ -83,12 +83,13 @@ namespace Venture.Data
 
 		public void Read(string Id)
 		{
-			Access.Root.Child("worlds/" + Id).GetValueAsync().ContinueWith(task =>
+			//Read meta
+			Access.Root.Child("worlds/meta/" + Id).GetValueAsync().ContinueWith(world =>
 			{
-				if (task.IsCompleted)
+				if (world.IsCompleted && world.Exception == null)
 				{
-					DataSnapshot snapshot = task.Result;
-					Debug.Log(snapshot.Value);
+					Meta.Name = world.Result.Child("Name").ToString();
+					Debug.Log(Meta.Name);
 				}
 				else
 					Debug.Log("Problem occured while reading the world.");

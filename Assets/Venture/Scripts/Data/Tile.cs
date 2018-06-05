@@ -8,9 +8,8 @@ namespace Venture.Data
 
 		public int X { get; private set; }
 		public int Z { get; private set; }
-
-		public Direction Direction { get; set; }
-		public TileSprite Sprite { get; set; }
+		public Direction Direction { get; private set; }
+		public TileSprite Sprite { get; private set; }
 
 		public Tile(int x, int z, Direction direction, TileSprite sprite)
 		{

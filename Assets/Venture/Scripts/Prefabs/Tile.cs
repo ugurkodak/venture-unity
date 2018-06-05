@@ -4,9 +4,9 @@ namespace Venture.Prefabs
 {
 	public class Tile : MonoBehaviour
 	{
-		private Data.Tile data;
-		private SpriteRenderer spriteRenderer;
 		public Sprite Water, Land;
+		public Data.Tile Data;
+		private SpriteRenderer spriteRenderer;
 
 		void Awake()
 		{
@@ -16,17 +16,17 @@ namespace Venture.Prefabs
 		public static Tile Render(Tile prefab, Data.Tile data, Transform parent, string name)
 		{
 			Tile tile = Instantiate(prefab);
-			tile.data = data;
+			tile.Data = data;
 			//TODO: Set direction
 			switch (data.Sprite)
 			{
-				case Data.Tile.TileSprite.Empty:
+				case Venture.Data.Tile.TileSprite.Empty:
 					tile.spriteRenderer.sprite = null;
 					break;
-				case Data.Tile.TileSprite.Water:
+				case Venture.Data.Tile.TileSprite.Water:
 					tile.spriteRenderer.sprite = tile.Water;
 					break;
-				case Data.Tile.TileSprite.Land:
+				case Venture.Data.Tile.TileSprite.Land:
 					tile.spriteRenderer.sprite = tile.Land;
 					break;
 			}

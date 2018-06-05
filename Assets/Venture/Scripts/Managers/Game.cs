@@ -9,12 +9,11 @@ namespace Venture.Managers
 	{
 		public static Game Instance = null;
 		public Console Console = null;
-		public GoogleSignInUser GoogleUser = null;
-		public FirebaseUser FirebaseUser = null; //This is used for character setup(authorization)
-		public string DEBUG_USER_ID = "123456789";
-
 		public enum Scenes : int { Login, World, City };
-		Scenes scene = Scenes.Login;
+
+		//public GoogleSignInUser GoogleUser = null;
+		//public FirebaseUser FirebaseUser = null; //This is used for character setup(authorization)
+		//public string DEBUG_USER_ID = "123456789";
 
 		void Awake()
 		{
@@ -25,17 +24,17 @@ namespace Venture.Managers
 				Destroy(gameObject);
 			DontDestroyOnLoad(gameObject);
 
-			GoogleSignIn.Configuration = new GoogleSignInConfiguration
-			{
-				WebClientId = "356906761499-utkt6d8uicpjckqu2ppq980mr4kfjdv7.apps.googleusercontent.com",
-				RequestIdToken = true,
-				UseGameSignIn = false
-			};
+			//GoogleSignIn.Configuration = new GoogleSignInConfiguration
+			//{
+			//	WebClientId = "356906761499-utkt6d8uicpjckqu2ppq980mr4kfjdv7.apps.googleusercontent.com",
+			//	RequestIdToken = true,
+			//	UseGameSignIn = false
+			//};
 		}
 
 		void Start()
 		{
-			if (GoogleUser == null)
+			if (User.Instance.FirebaseUser == null)
 				Document.Instance.Open(Document.Instance.SignIn);
 		}
 
@@ -45,15 +44,12 @@ namespace Venture.Managers
 			{
 				case (int)Scenes.Login:
 					SceneManager.LoadScene("Login");
-					scene = (int)Scenes.Login;
 					break;
 				case (int)Scenes.World:
 					SceneManager.LoadScene("World");
-					scene = (int)Scenes.World;
 					break;
 				case (int)Scenes.City:
 					SceneManager.LoadScene("City");
-					scene = (int)Scenes.City;
 					break;
 				default:
 					Debug.LogError("Undefined scene.");

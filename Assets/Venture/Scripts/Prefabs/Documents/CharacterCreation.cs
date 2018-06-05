@@ -50,14 +50,14 @@ namespace Venture.Prefabs
 			//TODO: Validate
 			//TODO: Check how many players are registered in the world and either lock it down or
 			//create new city.
-			Character.Instance.data.Create(
+			Character.Instance.Data.Create(
 				fieldFirstName.text,
 				fieldLastName.text,
 				worldIds[dropdownWorld.value],
 #if UNITY_EDITOR 
-				Game.Instance.DEBUG_USER_ID)
+				Data.User.UNITY_EDITOR_USER_ID)
 #else
-				Game.Instance.FirebaseUser.UserId)
+				User.Instance.FirebaseUser.UserId)
 #endif
 				.Write();
 			Character.Instance.SetupSession();

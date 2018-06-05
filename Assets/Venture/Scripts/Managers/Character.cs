@@ -5,7 +5,7 @@ namespace Venture.Managers
 	public class Character : MonoBehaviour
 	{
 		public static Character Instance;
-		public Data.Character data;
+		public Data.Character Data;
 
 		void Awake()
 		{
@@ -15,37 +15,52 @@ namespace Venture.Managers
 			else if (Instance != this)
 				Destroy(gameObject);
 			DontDestroyOnLoad(gameObject);
-			data = new Data.Character();
+			Data = new Data.Character();
 		}
 
 		public void SetupSession()
 		{
-			Data.Access.Root.Child("characters")
+			Venture.Data.Access.Root.Child("characters")
 			.OrderByChild("UserId")
-#if UNITY_EDITOR
-			.EqualTo(Game.Instance.DEBUG_USER_ID)
-#else
-			.EqualTo(Game.Instance.FirebaseUser.UserId)
-#endif
-			.GetValueAsync().ContinueWith(task =>
+			.EqualTo(User.Instance.Data.CharacterId)
+			.GetValueAsync()
+			.ContinueWith(task => 
 			{
-				if (task.IsCompleted && task.Exception == null)
-				{
-					if (task.Result.Exists)
-					{
-#if UNITY_EDITOR
-						data.Read(Game.Instance.DEBUG_USER_ID);
-#else
-						data.Read(Game.Instance.FirebaseUser.UserId);
-#endif
-						Game.Instance.LoadScene((int)Game.Scenes.World);
-					}
-					else
-						Document.Instance.Open(Document.Instance.CharacterCreation);
-				}
-				else
-					Debug.Log("Fail: Could't set up character session");
+				var val = task.Result.Value as string;
+				//Debug.Log(val);
+				//Debug.Log(task.Result.Key);
+				//Debug.Log(task.Result.Exists);
+				//Debug.Log(task.Result.GetRawJsonValue());
 			});
+
+
+//			Venture.Data.Access.Root.Child("characters")
+//			.OrderByChild("UserId")
+//#if UNITY_EDITOR
+//			.EqualTo(Game.Instance.DEBUG_USER_ID)
+//#else
+//			.EqualTo(Game.Instance.FirebaseUser.UserId)
+//#endif
+//			.GetValueAsync().ContinueWith(task =>
+//			{
+//				if (task.IsCompleted && task.Exception == null)
+//				{
+//					if (task.Result.Exists)
+//					{
+//#if UNITY_EDITOR
+//						Debug.Log(task.Result);
+//						//Data.Read(task.Result.ChildrenCount);
+//#else
+//						Data.Read(Game.Instance.FirebaseUser.UserId);
+//#endif
+//						Game.Instance.LoadScene((int)Game.Scenes.World);
+//					}
+//					else
+//						Document.Instance.Open(Document.Instance.CharacterCreation);
+//				}
+//				else
+//					Debug.Log("Fail: Could't set up character session");
+//			});
 		}
 	}
 }

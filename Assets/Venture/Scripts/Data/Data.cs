@@ -3,6 +3,7 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using System;
 
+//TODO: Exception handling
 namespace Venture.Data
 {
 	public enum Direction { North, East, South, West };
@@ -11,6 +12,7 @@ namespace Venture.Data
 	public static class Access
 	{
 		public static DatabaseReference Root;
+		public const string DATE_TIME_FORMAT = "yyyymmddhhmm"; 
 
 		static Access()
 		{
@@ -19,7 +21,6 @@ namespace Venture.Data
 			FirebaseApp.DefaultInstance.SetEditorP12FileName("Venture-9af379c14c56.p12");
 			FirebaseApp.DefaultInstance.SetEditorServiceAccountEmail("venture-196117@appspot.gserviceaccount.com");
 			FirebaseApp.DefaultInstance.SetEditorP12Password("notasecret");
-
 			Root = FirebaseDatabase.DefaultInstance.RootReference;
 
 		}
