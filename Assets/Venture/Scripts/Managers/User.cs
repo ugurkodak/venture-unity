@@ -1,85 +1,16 @@
 ﻿using UnityEngine;
 using Firebase.Auth;
 using Google;
-using System;
-using Newtonsoft.Json;
-
-namespace Venture.Data
-{
-	public class User
-	{
-		public const string UNITY_EDITOR_USER_ID = "123456789";
-		private readonly string id;
-		public string JoinDate { get; private set; }
-		//User can only have one active character but abandoned 
-		//characters persist in simulation until the world end date
-		public string ActiveCharacterId { get; private set; }
-		public string LastLogin { get; private set; }
-		//TODO: User stats
-
-		public User(string id)
-		{
-			this.id = id;
-		}
-
-		public async void Create()
-		{
-			var user = await Access.Root.Child("users/" + id).GetValueAsync();
-			if (!user.Exists)
-			{
-				JoinDate = DateTime.Now.ToString(Access.DATE_TIME_FORMAT);
-				Update();
-				Debug.Log("New user.");
-			}
-			else
-				Debug.LogError("User already exists.");
-		}
-
-		public async void Update()
-		{
-			await Access.Root.Child("users/" + id)
-			.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
-		}
-
-		public async void Read()
-		{
-			var user = await Access.Root.Child("users/" + id).GetValueAsync();
-			if (user.Exists)
-			{
-				ActiveCharacterId = user.Child("ActiveCharacterId").GetRawJsonValue();
-				JoinDate = user.Child("JoinDate").GetRawJsonValue();
-				LastLogin = user.Child("LastLogin").GetRawJsonValue();
-			}
-			else
-				Debug.LogError("User doesn't exist.");
-		}
-
-		public void Delete()
-		{
-
-		}
-
-		public void UpdateActiveCharacter(string characterId)
-		{
-			ActiveCharacterId = characterId;
-			Update();
-		}
-
-		public void UpdateLastLogin()
-		{
-			LastLogin = DateTime.Now.ToString(Data.Access.DATE_TIME_FORMAT);
-			Update();
-		}
-	}
-}
+using System.Threading.Tasks;
 
 namespace Venture.Managers //TODO: Move file into managers and create a manager prefab
 {
 	public class User : MonoBehaviour
 	{
+		public const string UNITY_EDITOR_USER_ID = "123456789";
 		public static User Instance;
-		public GoogleSignInUser GoogleUser;
-		public FirebaseUser FirebaseUser; //This is used for character setup(authorization) TODO:Probably remove these
+		//public GoogleSignInUser GoogleUser;
+		//public FirebaseUser FirebaseUser; //This is used for character setup(authorization) TODO:Probably remove
 		public Data.User Data;
 
 		void Awake()
@@ -91,9 +22,9 @@ namespace Venture.Managers //TODO: Move file into managers and create a manager 
 				Destroy(gameObject);
 			DontDestroyOnLoad(gameObject);
 
-			GoogleUser = null;
-			FirebaseUser = null;
-			Data = new Data.User(Venture.Data.User.UNITY_EDITOR_USER_ID); //TODO: Remove
+			//GoogleUser = null;
+			//FirebaseUser = null;
+			//Data = new Data.User(Venture.Data.User.UNITY_EDITOR_USER_ID); //TODO: Remove
 
 			GoogleSignIn.Configuration = new GoogleSignInConfiguration
 			{
@@ -105,25 +36,44 @@ namespace Venture.Managers //TODO: Move file into managers and create a manager 
 
 		private void Start()
 		{
-			Data.Create();
-			//Data.Pull(Venture.Data.User.UNITY_EDITOR_USER_ID);
+			TestCRUD();
 		}
 
-		public async void SignIn(Action continuation)
+		public async void TestCRUD()
 		{
-			Instance.GoogleUser = await GoogleSignIn.DefaultInstance.SignIn();
-			Instance.FirebaseUser = await FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(
-				GoogleAuthProvider.GetCredential(Instance.GoogleUser.IdToken, null));
-			Data.UpdateLastLogin();
-			continuation();
+			Debug.Log("--- USER CRUD TEST ---");
+			Debug.Log("Allocating new user data in memory with debug id.");
+			Data = new Data.User(UNITY_EDITOR_USER_ID);
+			Debug.Log("Creating new user in database");
+			await Data.Create();
+			Debug.Log("Reading user from database");
+			await Data.Read();
+			Debug.Log("Deleting user");
+			await Data.Delete();
+			Debug.Log("Done");
+		}
+
+		public async Task SignIn()
+		{
+#if UNITY_EDITOR
+			Data = new Data.User(UNITY_EDITOR_USER_ID);
+#else
+			var FirebaseUser = await FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(
+				GoogleAuthProvider.GetCredential((await GoogleSignIn.DefaultInstance.SignIn()).IdToken, null));
+			Data = new Data.User(FirebaseUser.UserId);
+#endif
+			//if (await Data.Read())
+			//	await Data.UpdateLastLogin();
+			//else
+			//	Document.Instance.Open(Document.Instance.CharacterCreation);
 		}
 
 		public void SignOut()
 		{
 			FirebaseAuth.DefaultInstance.SignOut();
 			GoogleSignIn.DefaultInstance.SignOut();
-			Instance.GoogleUser = null;
-			Instance.FirebaseUser = null;
+			//Instance.GoogleUser = null;
+			//Instance.FirebaseUser = null;
 		}
 	}
 }

@@ -34,8 +34,8 @@ namespace Venture.Managers
 
 		void Start()
 		{
-			if (User.Instance.FirebaseUser == null)
-				Document.Instance.Open(Document.Instance.SignIn);
+			//if (User.Instance.Data == null)
+				//Document.Instance.Open(Document.Instance.SignIn);
 		}
 
 		public void LoadScene(int scene)

@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4564373421553460}
-  - component: {fileID: 114125347073559048}
+  - component: {fileID: 114141420916351732}
   m_Layer: 0
   m_Name: User
   m_TagString: Untagged
@@ -34,13 +34,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1052341348667882}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.782179, y: 130.64078, z: -23.47825}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114125347073559048
+--- !u!114 &114141420916351732
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -51,5 +51,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9246046fec08574c99758ce17e4a950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DEBUG_USER_ID: 123456789
-  CharacterId: 

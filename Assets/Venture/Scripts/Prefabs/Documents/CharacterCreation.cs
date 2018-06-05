@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Venture.Managers;
 
-namespace Venture.Prefabs
+namespace Venture.Documents
 {
 	public class CharacterCreation : MonoBehaviour
 	{
@@ -55,7 +55,7 @@ namespace Venture.Prefabs
 				fieldLastName.text,
 				worldIds[dropdownWorld.value],
 #if UNITY_EDITOR 
-				Data.User.UNITY_EDITOR_USER_ID)
+				User.UNITY_EDITOR_USER_ID)
 #else
 				User.Instance.FirebaseUser.UserId)
 #endif
