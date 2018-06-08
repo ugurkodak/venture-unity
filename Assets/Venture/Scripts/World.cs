@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Venture.Managers
+namespace Venture.Prefabs.Managers
 {
 	public class World : MonoBehaviour
 	{

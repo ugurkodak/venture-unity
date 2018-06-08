@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Venture.Managers
+namespace Venture
 {
 	public class Document : MonoBehaviour
 	{

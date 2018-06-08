@@ -1,67 +1,54 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Venture.Managers;
+using System.Threading.Tasks;
 
-namespace Venture.Documents
+namespace Venture.Prefabs.Documents
 {
 	public class CharacterCreation : MonoBehaviour
 	{
-		Button buttonSubmit;
-		InputField fieldFirstName;
-		InputField fieldLastName;
-		Dropdown dropdownWorld;
+		Button button_Submit;
+		InputField field_FirstName;
+		InputField field_LastName;
+		Dropdown dropdown_World;
 
 		List<string> worldIds = new List<string>();
 
 		void Awake()
 		{
-			buttonSubmit = transform.Find("Content").Find("ButtonSubmit").GetComponent<Button>();
-			fieldFirstName = transform.Find("Content").Find("Form").Find("FieldFirstName").GetComponent<InputField>();
-			fieldLastName = transform.Find("Content").Find("Form").Find("FieldLastName").GetComponent<InputField>();
-			dropdownWorld = transform.Find("Content").Find("Form").Find("DropdownWorld").GetComponent<Dropdown>();
-			dropdownWorld.ClearOptions();
-			buttonSubmit.onClick.AddListener(OnSubmit);
-		}
-
-		void Start()
-		{
-			//Read all worlds meta and fill dropdown with names
-			Data.Access.Root.Child("worlds/meta").GetValueAsync().ContinueWith(worlds =>
+			button_Submit = transform.Find("Content").Find("ButtonSubmit").GetComponent<Button>();
+			field_FirstName = transform.Find("Content").Find("Form").Find("FieldFirstName").GetComponent<InputField>();
+			field_LastName = transform.Find("Content").Find("Form").Find("FieldLastName").GetComponent<InputField>();
+			dropdown_World = transform.Find("Content").Find("Form").Find("DropdownWorld").GetComponent<Dropdown>();
+			dropdown_World.ClearOptions();
+			PopulateWorlds();
+			button_Submit.onClick.AddListener(async () =>
 			{
-				if (worlds.IsCompleted && worlds.Exception == null && worlds.Result.Exists)
-				{
-					List<string> names = new List<string>();
-					
-					foreach (var world in worlds.Result.Children)
-					{
-						names.Add(world.Child("Name").Value.ToString());
-						worldIds.Add(world.Key);
-					}
-					dropdownWorld.AddOptions(names);
-				}
-				else
-					Debug.Log("Fail: Could't read world names");
+				Document.Instance.Submit();
+				await Character.Instance.Data.Create(
+				field_FirstName.text,
+				field_LastName.text,
+				worldIds[dropdown_World.value],
+				User.Instance.Data.Document.Key);
+				await User.Instance.UpdateActiveCharacter(Character.Instance.Data.Document.Key);
 			});
 		}
 
-		void OnSubmit()
+		private async void PopulateWorlds()
 		{
-			//TODO: Validate
-			//TODO: Check how many players are registered in the world and either lock it down or
-			//create new city.
-			Character.Instance.Data.Create(
-				fieldFirstName.text,
-				fieldLastName.text,
-				worldIds[dropdownWorld.value],
-#if UNITY_EDITOR 
-				User.UNITY_EDITOR_USER_ID)
-#else
-				User.Instance.FirebaseUser.UserId)
-#endif
-				.Write();
-			Character.Instance.SetupSession();
-
+			var worlds = await Data.Access.Root.Child("worlds/meta").GetValueAsync();
+			if (worlds.Exists)
+			{
+				List<string> names = new List<string>();
+				foreach (var world in worlds.Children)
+				{
+					names.Add(world.Child("Name").Value.ToString());
+					worldIds.Add(world.Key);
+				}
+				dropdown_World.AddOptions(names);
+			}
+			else
+				Debug.LogError("Fail: Could't read world names");
 		}
 	}
 }

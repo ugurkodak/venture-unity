@@ -31,108 +31,44 @@ namespace Venture.Data
 	//TODO: Exception handling
 	public abstract class Data
 	{
-		protected DatabaseReference collection;
-		protected DatabaseReference document;
+		[JsonIgnore]
+		public DatabaseReference Collection;
+		[JsonIgnore]
+		public DatabaseReference Document;
 
 		public Data()
 		{
-			collection = Access.Root.Child(GetType().Name);
+			Collection = Access.Root.Child(GetType().Name);
 		}
 
-		public virtual async Task Create()
+		protected virtual async Task Create()
 		{
-			document = collection.Push();
-			await document.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
+			Document = Collection.Push();
+			await Update();
+		}
+
+		public virtual async Task<bool> Read(string key)
+		{
+			Document = Collection.Child(key);
+			var values = await Document.GetValueAsync();
+			if (values.Exists)
+			{
+				JsonConvert.PopulateObject(values.GetRawJsonValue(), this);
+				return true;
+			}
+			else
+				return false;
 		}
 
 		public virtual async Task Update()
 		{
-			await document.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
-		}
-
-		public virtual async Task Read()
-		{
-			var values = await document.GetValueAsync();
-			JsonConvert.PopulateObject(values.GetRawJsonValue(), this);
+			await Document.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
 		}
 
 		public virtual async Task Delete()
 		{
-			await document.RemoveValueAsync();
+			await Document.RemoveValueAsync();
 		}
 
-	}
-
-	public class User : Data
-	{
-		private readonly string id;
-		public string JoinDate { get; set; }
-		//User can only have one active character but abandoned 
-		//characters persist in simulation until the world end date
-		public string ActiveCharacterId { get; set; }
-		public string LastLogin { get; set; }
-		//TODO: User stats
-
-		public User(string id)
-		{
-			this.id = id;
-		}
-
-		//User has a special case for create. It's id should be manualy set
-		public override async Task Create()
-		{
-			JoinDate = DateTime.Now.ToString(Access.DATE_TIME_FORMAT);
-			document = collection.Child(id);
-			await Update();
-			//var user = await Access.Root.Child("users/" + id).GetValueAsync();
-			//if (!user.Exists)
-			//{
-				
-			//	await Update();
-			//	Debug.Log("New user created.");
-			//}
-			//else
-			//	Debug.LogError("User already exists.");
-		}
-
-		//public async Task Update()
-		//{
-		//	await Access.Root.Child("users/" + id)
-		//	.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
-		//}
-
-		//public async Task<bool> Read()
-		//{
-		//	var user = await Access.Root.Child("users/" + id).GetValueAsync();
-		//	if (user.Exists)
-		//	{
-		//		ActiveCharacterId = user.Child("ActiveCharacterId").GetRawJsonValue();
-		//		JoinDate = user.Child("JoinDate").GetRawJsonValue();
-		//		LastLogin = user.Child("LastLogin").GetRawJsonValue();
-		//		return true;
-		//	}
-		//	else
-		//	{
-		//		Debug.LogError("Couldn't read user.");
-		//		return false;
-		//	}
-		//}
-
-		////public async Task Delete()
-		////{
-
-		////}
-
-		//public async Task UpdateActiveCharacter(string characterId)
-		//{
-		//	ActiveCharacterId = characterId;
-		//	await Update();
-		//}
-
-		//public async Task UpdateLastLogin()
-		//{
-		//	LastLogin = DateTime.Now.ToString(Access.DATE_TIME_FORMAT);
-		//	await Update();
-		//}
 	}
 }
