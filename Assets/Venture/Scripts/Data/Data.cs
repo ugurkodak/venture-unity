@@ -2,15 +2,13 @@
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using Newtonsoft.Json;
-using System;
 using System.Threading.Tasks;
-using UnityEngine;
 
 //TODO: Exception handling
+//TODO: CRUD functions stop excecuting when editor window is not focused
 namespace Venture.Data
 {
 	public enum Direction { North, East, South, West };
-	public enum Resource { Agriculture, Mining};
 
 	public static class Access
 	{
@@ -19,7 +17,7 @@ namespace Venture.Data
 
 		static Access()
 		{
-			//UNITY_EDITOR User 
+			//UNITY_EDITOR User
 			FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://venture-196117.firebaseio.com/");
 			FirebaseApp.DefaultInstance.SetEditorP12FileName("Venture-9af379c14c56.p12");
 			FirebaseApp.DefaultInstance.SetEditorServiceAccountEmail("venture-196117@appspot.gserviceaccount.com");
@@ -28,26 +26,19 @@ namespace Venture.Data
 		}
 	}
 
-	//TODO: Exception handling
-	public abstract class Data
+	public abstract class Node
 	{
 		[JsonIgnore]
 		public DatabaseReference Collection;
 		[JsonIgnore]
 		public DatabaseReference Document;
 
-		public Data()
+		public Node()
 		{
 			Collection = Access.Root.Child(GetType().Name);
 		}
 
-		protected virtual async Task Create()
-		{
-			Document = Collection.Push();
-			await Update();
-		}
-
-		public virtual async Task<bool> Read(string key)
+		public async Task<bool> Read(string key)
 		{
 			Document = Collection.Child(key);
 			var values = await Document.GetValueAsync();
@@ -60,15 +51,14 @@ namespace Venture.Data
 				return false;
 		}
 
-		public virtual async Task Update()
+		public async Task Update()
 		{
 			await Document.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
 		}
 
-		public virtual async Task Delete()
+		public async Task Delete()
 		{
 			await Document.RemoveValueAsync();
 		}
-
 	}
 }

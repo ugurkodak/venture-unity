@@ -16,10 +16,5 @@ namespace Venture
 			DontDestroyOnLoad(gameObject);
 			Data = new Data.Character();
 		}
-
-		public void Initialize()
-		{
-
-		}
 	}
 }

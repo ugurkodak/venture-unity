@@ -1,22 +1,20 @@
-﻿using UnityEngine;
-
-namespace Venture.Data
+﻿namespace Venture.Data
 {
-	public class Tile
+	public struct Tile
 	{
-		public enum TileSprite { Water, Land, Empty };
+		public enum TileSprite { Empty, Water, Land };
 
-		public int X { get; private set; }
-		public int Z { get; private set; }
-		public Direction Direction { get; private set; }
-		public TileSprite Sprite { get; private set; }
+		public int X;
+		public int Z;
+		public Direction Direction;
+		public TileSprite Sprite;
 
 		public Tile(int x, int z, Direction direction, TileSprite sprite)
 		{
 			X = x;
 			Z = z;
-			Sprite = sprite;
 			Direction = direction;
+			Sprite = sprite;
 		}
 	}
 }

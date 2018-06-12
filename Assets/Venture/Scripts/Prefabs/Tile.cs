@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 
-namespace Venture.Prefabs
+namespace Venture
 {
 	public class Tile : MonoBehaviour
 	{
 		public Sprite Water, Land;
-		public Data.Tile Data;
 		private SpriteRenderer spriteRenderer;
 
 		void Awake()
@@ -16,17 +15,15 @@ namespace Venture.Prefabs
 		public static Tile Render(Tile prefab, Data.Tile data, Transform parent, string name)
 		{
 			Tile tile = Instantiate(prefab);
-			tile.Data = data;
-			//TODO: Set direction
 			switch (data.Sprite)
 			{
-				case Venture.Data.Tile.TileSprite.Empty:
+				case Data.Tile.TileSprite.Empty:
 					tile.spriteRenderer.sprite = null;
 					break;
-				case Venture.Data.Tile.TileSprite.Water:
+				case Data.Tile.TileSprite.Water:
 					tile.spriteRenderer.sprite = tile.Water;
 					break;
-				case Venture.Data.Tile.TileSprite.Land:
+				case Data.Tile.TileSprite.Land:
 					tile.spriteRenderer.sprite = tile.Land;
 					break;
 			}

@@ -30,11 +30,6 @@ namespace Venture
 			};
 		}
 
-		//void Start()
-		//{
-		//	TestCRUD();
-		//}
-
 		public async Task SignIn()
 		{
 #if UNITY_EDITOR
@@ -46,10 +41,13 @@ namespace Venture
 #endif
 			if (await Data.Read(id))
 			{
-				if (Data.ActiveCharacterId == null)
+				if (Data.ActiveCharacterKey == null)
 					Document.Instance.Open(Document.Instance.CharacterCreation);
 				else
+				{
+					await Character.Instance.Data.Read(Data.ActiveCharacterKey);
 					SceneManager.LoadScene("World");
+				}
 			}
 			else
 			{
@@ -67,7 +65,7 @@ namespace Venture
 
 		public async Task UpdateActiveCharacter(string characterId)
 		{
-			Data.ActiveCharacterId = characterId;
+			Data.ActiveCharacterKey = characterId;
 			await Data.Update();
 		}
 
@@ -75,18 +73,6 @@ namespace Venture
 		{
 			Data.LastSignIn = DateTime.Now.ToString(Venture.Data.Access.DATE_TIME_FORMAT);
 			await Data.Update();
-		}
-
-		public async void TestCRUD()
-		{
-			Debug.Log("--- USER CRUD TEST ---");
-			Debug.Log("Creating new user in database with debug id");
-			await Data.Create(UNITY_EDITOR_USER_ID);
-			Debug.Log("Reading user from database");
-			await Data.Read(UNITY_EDITOR_USER_ID);
-			Debug.Log("Deleting user");
-			await Data.Delete();
-			Debug.Log("Done");
 		}
 	}
 }

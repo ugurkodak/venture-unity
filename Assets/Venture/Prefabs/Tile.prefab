@@ -52,8 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86217f626d50e2b4e9380b0d9991c751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Land: {fileID: 21300000, guid: ac112e334fa74c44a888a0f12286fd1a, type: 3}
   Water: {fileID: 21300000, guid: f2a5de6f990bdc64b9706900669cc9f7, type: 3}
+  Land: {fileID: 21300000, guid: ac112e334fa74c44a888a0f12286fd1a, type: 3}
 --- !u!212 &212552504111685368
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -67,6 +67,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:

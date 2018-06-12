@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Threading.Tasks;
 
 namespace Venture.Prefabs.Documents
 {
@@ -31,12 +31,13 @@ namespace Venture.Prefabs.Documents
 				worldIds[dropdown_World.value],
 				User.Instance.Data.Document.Key);
 				await User.Instance.UpdateActiveCharacter(Character.Instance.Data.Document.Key);
+				SceneManager.LoadScene("World");
 			});
 		}
 
 		private async void PopulateWorlds()
 		{
-			var worlds = await Data.Access.Root.Child("worlds/meta").GetValueAsync();
+			var worlds = await Data.Access.Root.Child("WorldInfo").GetValueAsync();
 			if (worlds.Exists)
 			{
 				List<string> names = new List<string>();

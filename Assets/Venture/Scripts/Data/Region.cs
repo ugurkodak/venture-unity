@@ -1,27 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Venture.Data
 {
-	[System.Serializable]
-	public class Region
+	public class Region : Node
 	{
 		//TODO: Remove temporary database placeholders.
 		private List<string> regionNames = new List<string> {
 			"Efleutan", "Fastairia", "Ugria", "Judrein", "Broylor",
 			"Skiytho", "Ufra", "Ablal", "Bleuc Flines", "Sneow Spein" };
 
-		public string Name { get; private set; }
-		public Tile[] Tiles { get; set; }
-		//TODO: public bool HasCity { get; private set; }
-		//TODO: public Resource[] Resources { get; private set; }
+		public List<Tile> Tiles;
+		public string Name;
+		public string CityKey;
+		//TODO: public Resource[] Resources;
 
-		public Region(int size)
+		public Region()
 		{
-			//TODO: Remove temporary database placeholders.
+			Tiles = new List<Tile>();
+		}
+
+		public async Task Create(string worldKey)
+		{
+			Document = Collection.Child(worldKey).Push();
 			Name = regionNames[Random.Range(0, regionNames.Count - 1)];
-			Tiles = new Tile[size];
+			await Update();
 		}
 
 		public Vector3 GetPivot()
@@ -29,7 +33,7 @@ namespace Venture.Data
 			Vector3 pivot = new Vector3();
 			foreach (Tile tile in Tiles)
 				pivot += new Vector3(tile.X, 0, tile.Z);
-			return pivot / Tiles.Length;
+			return pivot / Tiles.Count;
 		}
 	}
 }
