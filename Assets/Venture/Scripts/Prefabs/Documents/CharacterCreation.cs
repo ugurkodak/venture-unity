@@ -25,12 +25,13 @@ namespace Venture.Prefabs.Documents
 			button_Submit.onClick.AddListener(async () =>
 			{
 				Document.Instance.Submit();
-				await Character.Instance.Data.Create(
+				Character.Instance.Data.Create(
 				field_FirstName.text,
 				field_LastName.text,
 				worldIds[dropdown_World.value],
-				User.Instance.Data.Document.Key);
-				await User.Instance.UpdateActiveCharacter(Character.Instance.Data.Document.Key);
+				User.Instance.Data.Key);
+				await Character.Instance.Data.Update();
+				await User.Instance.Data.UpdateActiveCharacter(Character.Instance.Data.Key);
 				SceneManager.LoadScene("World");
 			});
 		}

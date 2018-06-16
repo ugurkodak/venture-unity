@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Threading.Tasks;
 
 namespace Venture
 {
@@ -15,6 +16,11 @@ namespace Venture
 				Destroy(gameObject);
 			DontDestroyOnLoad(gameObject);
 			Data = new Data.Character();
+		}
+
+		public async Task SetupInstance(string key)
+		{
+			await Data.Load(key);
 		}
 	}
 }

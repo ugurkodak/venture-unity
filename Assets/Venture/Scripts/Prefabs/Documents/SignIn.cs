@@ -15,7 +15,7 @@ namespace Venture.Prefabs.Documents
 					gameObject.GetComponentInChildren<Text>().text = "Signing In...";
 					gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Normal;
 					Document.Instance.Submit();
-					await User.Instance.SignIn();
+					await User.Instance.SetupInstance();
 			});
 		}
 

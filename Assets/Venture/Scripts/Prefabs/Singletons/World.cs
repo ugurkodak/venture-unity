@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using System.Threading.Tasks;
+using Firebase.Database;
 
 namespace Venture
 {
 	public class World : MonoBehaviour
 	{
-		public Tile Tile;
+		public Sprite WaterTile, LandTile;
 		public Data.World Data;
 		public static World Instance;
 
@@ -18,36 +20,86 @@ namespace Venture
 			Data = new Data.World();
 		}
 
-		void Start()
+		async void Start()
 		{
-			//Data.Create();
-			Render(Character.Instance.Data.WorldId);
-			//Render("-LElrAqQ0FK4iDHCNkN-");
+			Data.Create();
+			await Data.Update();
+			Render();
+			
+			//await AddNew();
+			//AddNew();
+			//SetupSession(Character.Instance.Data.WorldId);
+			//SetupSession("-LF-Msi7xLrg4xUHFuG3");
 		}
 
-		public async void Render(string key)
-		{
-			await Data.Read(key);
-			name = Data.Info.Name;
-
-			GameObject waters = new GameObject("WorldWaters");
-			waters.transform.parent = transform;
-			foreach (Data.Tile tileData in Data.Waters.List)
-				Tile.Render(Tile, tileData, waters.transform, "water");
-
-			GameObject regions = new GameObject("WorldRegions");
-			regions.transform.parent = transform;
-			foreach (Data.Region regionData in Data.Regions.List)
-				Region.Render(regionData, Tile, regions.transform);
-		}
-
-		//public void Render()
+		//public async Task SetupSession(string key)
 		//{
-		//	name = Data.Info.Name;
-		//	foreach (Data.Region region in Data.Regions)
-		//		Prefabs.Region.Render(region, Tile, transform);
-		//	foreach (Data.Tile tile in Data.Waters)
-		//		Prefabs.Tile.Render(Tile, tile, transform, "ocean tile");
+		//	await Data.Load(key);
 		//}
+
+		//public async Task AddNew()
+		//{
+		//	Data.Create();
+		//	await Data.Add();
+		//}
+
+		public void Render()
+		{
+			GameObject waters = new GameObject("Waters");
+			waters.transform.parent = transform;
+			foreach (Data.OceanTile tileData in Data.Waters)
+			{
+				GameObject tile = new GameObject();
+				tile.AddComponent<SpriteRenderer>().sprite = WaterTile;
+				tile.transform.position = new Vector3(tileData.X, 0, tileData.Z);
+				tile.transform.eulerAngles = new Vector3(90, 0, 0);
+				tile.transform.parent = waters.transform;
+				tile.name = "tile_water";
+			}
+
+			GameObject regions = new GameObject("Regions");
+			regions.transform.parent = transform;
+			foreach (Data.Region regionData in Data.Regions)
+			{
+				GameObject region = new GameObject(regionData.Info.Name);
+				region.transform.position = regionData.GetPivot();
+				region.transform.parent = regions.transform;
+
+				//TODO: Handle region borders/colors differently
+				Color color = new Color(
+					Random.Range(0.0f, 1.0f), Random.Range(0.8f, 1.0f), 1.0f, 1.0f);
+				foreach (Data.RegionTile tileData in regionData.Tiles)
+				{
+					GameObject tile = new GameObject();
+					tile.AddComponent<SpriteRenderer>().sprite = LandTile;
+					tile.transform.position = new Vector3(tileData.X, 0, tileData.Z);
+					tile.transform.eulerAngles = new Vector3(90, 0, 0);
+					tile.transform.parent = region.transform;
+					tile.name = "tile_region";
+					tile.GetComponent<SpriteRenderer>().color = color;
+				}
+			}
+
+
+			//Region.Render(regionData, Tile, regions.transform);
+		}
+		//public class Region : MonoBehaviour
+		//{
+		//	public static Region Render(Data.Region data, Tile tilePrefab, Transform parent)
+		//	{
+		//		Region region = new GameObject().AddComponent<Region>(); //Fake prefab
+		//		region.transform.position = data.GetPivot();
+		//		region.transform.parent = parent;
+		//		//region.name = data.Name;
+
+		//		Color color = new Color( //TODO: Handle region borders differently
+		//				Random.Range(0.0f, 1.0f), Random.Range(0.8f, 1.0f), 1.0f, 1.0f);
+		//		foreach (Data.RegionTile tile in data.Tiles)
+		//			Tile.Render(tilePrefab, tile, region.transform, "land")
+		//				.GetComponent<SpriteRenderer>().color = color;
+		//		return region;
+		//	}
+		//}
+
 	}
 }

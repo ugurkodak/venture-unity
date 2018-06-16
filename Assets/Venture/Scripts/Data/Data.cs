@@ -2,9 +2,10 @@
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-//TODO: Exception handling
+//TODO: Error handling
 //TODO: CRUD functions stop excecuting when editor window is not focused
 namespace Venture.Data
 {
@@ -26,39 +27,67 @@ namespace Venture.Data
 		}
 	}
 
-	public abstract class Node
+	public abstract class DBModel
 	{
 		[JsonIgnore]
 		public DatabaseReference Collection;
 		[JsonIgnore]
-		public DatabaseReference Document;
-
-		public Node()
+		public DatabaseReference Reference;
+		[JsonIgnore]
+		public string Key
 		{
-			Collection = Access.Root.Child(GetType().Name);
+			get { return Reference.Key; }
+			set { Reference = Collection.Child(value); }
 		}
 
-		public async Task<bool> Read(string key)
+		public DBModel(string parentKeys)
 		{
-			Document = Collection.Child(key);
-			var values = await Document.GetValueAsync();
-			if (values.Exists)
-			{
-				JsonConvert.PopulateObject(values.GetRawJsonValue(), this);
-				return true;
-			}
-			else
-				return false;
+			Collection = Access.Root.Child(GetType().Name + "/" + parentKeys);
+			Reference = Collection.Push();
+		}
+
+		public async Task Load(string key)
+		{
+			Reference = Collection.Child(key);
+			DataSnapshot snapshot = await Reference.GetValueAsync();
+			if (snapshot.Exists)
+				JsonConvert.PopulateObject(snapshot.GetRawJsonValue(), this);
 		}
 
 		public async Task Update()
 		{
-			await Document.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
+			await Reference.SetRawJsonValueAsync(JsonConvert.SerializeObject(this));
 		}
 
 		public async Task Delete()
 		{
-			await Document.RemoveValueAsync();
+			await Reference.RemoveValueAsync();
+			Key = null;
+			Reference = null;
+		}
+	}
+
+	public class DBList<T> : List<T> where T : DBModel
+	{
+		private DatabaseReference reference;
+
+		public DBList(string parentKeys)
+		{
+			reference = Access.Root.Child(typeof(T).Name + "/" + parentKeys);
+		}
+
+		public async Task Update()
+		{
+			Dictionary<string, object> collection = new Dictionary<string, object>();
+			foreach (T model in this)
+				collection.Add(model.Key, model);
+			await reference.SetRawJsonValueAsync(JsonConvert.SerializeObject(collection));
+		}
+
+		public async Task Delete()
+		{
+			await reference.RemoveValueAsync();
+			reference = null;
 		}
 	}
 }

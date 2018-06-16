@@ -30,7 +30,7 @@ namespace Venture
 			};
 		}
 
-		public async Task SignIn()
+		public async Task SetupInstance()
 		{
 #if UNITY_EDITOR
 			string id = UNITY_EDITOR_USER_ID;
@@ -39,40 +39,31 @@ namespace Venture
 				GoogleAuthProvider.GetCredential((await GoogleSignIn.DefaultInstance.SignIn()).IdToken, null));
 			string id = FirebaseUser.UserId;
 #endif
-			if (await Data.Read(id))
+			await Data.Load(id);
+			if (Data.DateCreated != null)
 			{
+				await Data.UpdateLastSignIn();
 				if (Data.ActiveCharacterKey == null)
 					Document.Instance.Open(Document.Instance.CharacterCreation);
 				else
 				{
-					await Character.Instance.Data.Read(Data.ActiveCharacterKey);
+					await Character.Instance.SetupInstance(Data.ActiveCharacterKey);
 					SceneManager.LoadScene("World");
 				}
 			}
 			else
 			{
-				await Data.Create(id);
+				Data.Create(id);
+				await Data.Update();
 				Document.Instance.Open(Document.Instance.CharacterCreation);
 			}
-			await UpdateLastSignIn();
 		}
 
-		public void SignOut()
-		{
-			FirebaseAuth.DefaultInstance.SignOut();
-			GoogleSignIn.DefaultInstance.SignOut();
-		}
-
-		public async Task UpdateActiveCharacter(string characterId)
-		{
-			Data.ActiveCharacterKey = characterId;
-			await Data.Update();
-		}
-
-		public async Task UpdateLastSignIn()
-		{
-			Data.LastSignIn = DateTime.Now.ToString(Venture.Data.Access.DATE_TIME_FORMAT);
-			await Data.Update();
-		}
+		//TODO: Do we need sign out?
+		//public void SignOut()
+		//{
+		//	FirebaseAuth.DefaultInstance.SignOut();
+		//	GoogleSignIn.DefaultInstance.SignOut();
+		//}
 	}
 }

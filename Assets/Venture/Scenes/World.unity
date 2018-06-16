@@ -156,8 +156,7 @@ Prefab:
         type: 2}
       propertyPath: Tile
       value: 
-      objectReference: {fileID: 114440555877109668, guid: 0cc1a8ebc8231b84083be2b9b4ad36da,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 114654295766289296, guid: 41dd749ca0bbd034f9511edc3e8f3ebe,
         type: 2}
       propertyPath: frequency
@@ -168,6 +167,18 @@ Prefab:
       propertyPath: seed
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 114654295766289296, guid: 41dd749ca0bbd034f9511edc3e8f3ebe,
+        type: 2}
+      propertyPath: LandTile
+      value: 
+      objectReference: {fileID: 21300000, guid: ac112e334fa74c44a888a0f12286fd1a,
+        type: 3}
+    - target: {fileID: 114654295766289296, guid: 41dd749ca0bbd034f9511edc3e8f3ebe,
+        type: 2}
+      propertyPath: WaterTile
+      value: 
+      objectReference: {fileID: 21300000, guid: f2a5de6f990bdc64b9706900669cc9f7,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41dd749ca0bbd034f9511edc3e8f3ebe, type: 2}
   m_IsPrefabParent: 0
