@@ -5,7 +5,7 @@
 		public int X;
 		public int Z;
 
-		public RegionTile(string worldKey, string regionKey) : base(worldKey + "/" + regionKey) { }
+		public RegionTile(string worldKey, string regionKey) : base(worldKey, regionKey) { }
 
 		public void Create(int x, int z)
 		{

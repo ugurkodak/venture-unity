@@ -15,8 +15,6 @@ namespace Venture.Data
 		public string ActiveCharacterKey;
 		public string LastSignIn;
 
-		public User() : base(null) { }
-
 		public void Create(string id)
 		{
 			Key = id;

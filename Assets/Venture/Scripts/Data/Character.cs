@@ -11,8 +11,6 @@ namespace Venture.Data
 		public string WorldId;
 		public string UserId;
 
-		public Character() : base(null) { }
-
 		public void Create(string firstName, string lastName, string worldId, string userId)
 		{
 			DateCreated = DateTime.Now.ToString(Access.DATE_TIME_FORMAT);

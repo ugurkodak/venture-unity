@@ -22,10 +22,11 @@ namespace Venture
 
 		async void Start()
 		{
-			Data.Create();
-			await Data.Update();
+			//Data.Create();
+			//await Data.Update();
+			await Data.Load("-LFAJZIOapn1RAmcojp0");
 			Render();
-			
+
 			//await AddNew();
 			//AddNew();
 			//SetupSession(Character.Instance.Data.WorldId);
@@ -47,7 +48,7 @@ namespace Venture
 		{
 			GameObject waters = new GameObject("Waters");
 			waters.transform.parent = transform;
-			foreach (Data.OceanTile tileData in Data.Waters)
+			foreach (Data.OceanTile tileData in Data.OceanTiles)
 			{
 				GameObject tile = new GameObject();
 				tile.AddComponent<SpriteRenderer>().sprite = WaterTile;
@@ -59,16 +60,22 @@ namespace Venture
 
 			GameObject regions = new GameObject("Regions");
 			regions.transform.parent = transform;
-			foreach (Data.Region regionData in Data.Regions)
+			foreach (Data.DBList<Data.RegionTile> regionTiles in Data.RegionTiles)
 			{
-				GameObject region = new GameObject(regionData.Info.Name);
-				region.transform.position = regionData.GetPivot();
+				Data.RegionInfo regionInfo = Data.RegionInfos.GetItem(regionTiles.Reference.Key);
+				GameObject region = new GameObject(regionInfo.Name);
+
+				//Center region gameobject to center of its tiles
+				Vector3 pivot = new Vector3();
+				foreach (Data.RegionTile tile in regionTiles)
+					pivot += new Vector3(tile.X, 0, tile.Z);
+				region.transform.position = pivot / regionTiles.Count;
 				region.transform.parent = regions.transform;
 
 				//TODO: Handle region borders/colors differently
 				Color color = new Color(
-					Random.Range(0.0f, 1.0f), Random.Range(0.8f, 1.0f), 1.0f, 1.0f);
-				foreach (Data.RegionTile tileData in regionData.Tiles)
+						Random.Range(0.0f, 1.0f), Random.Range(0.8f, 1.0f), 1.0f, 1.0f);
+				foreach (Data.RegionTile tileData in regionTiles)
 				{
 					GameObject tile = new GameObject();
 					tile.AddComponent<SpriteRenderer>().sprite = LandTile;
@@ -79,27 +86,6 @@ namespace Venture
 					tile.GetComponent<SpriteRenderer>().color = color;
 				}
 			}
-
-
-			//Region.Render(regionData, Tile, regions.transform);
 		}
-		//public class Region : MonoBehaviour
-		//{
-		//	public static Region Render(Data.Region data, Tile tilePrefab, Transform parent)
-		//	{
-		//		Region region = new GameObject().AddComponent<Region>(); //Fake prefab
-		//		region.transform.position = data.GetPivot();
-		//		region.transform.parent = parent;
-		//		//region.name = data.Name;
-
-		//		Color color = new Color( //TODO: Handle region borders differently
-		//				Random.Range(0.0f, 1.0f), Random.Range(0.8f, 1.0f), 1.0f, 1.0f);
-		//		foreach (Data.RegionTile tile in data.Tiles)
-		//			Tile.Render(tilePrefab, tile, region.transform, "land")
-		//				.GetComponent<SpriteRenderer>().color = color;
-		//		return region;
-		//	}
-		//}
-
 	}
 }
