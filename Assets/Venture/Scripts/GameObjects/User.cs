@@ -30,6 +30,11 @@ namespace Venture
 			};
 		}
 
+		void Start()
+		{
+			Document.Instance.Open(Document.Instance.SignIn);
+		}
+
 		public async Task SetupInstance()
 		{
 #if UNITY_EDITOR

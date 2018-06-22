@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 
 namespace Venture.Data
 {
-	//TODO: Figure out how to remove the extra List nodes
 	public class World
 	{
 		//World area needs must be perfectly divisible by region area

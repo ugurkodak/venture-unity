@@ -7,6 +7,9 @@ namespace Venture.Data
 	/*
 	 * - User can only have one active character but abandoned 
 	 * characters persist in simulation until the world end date.
+	 * To be able to start over, user needs to abandon its current
+	 * world and create a new character at another world. User can
+	 * not go back to an abandonned world.
 	 * - User key is set with firebase userid 
 	 */
 	public class User : DBModel

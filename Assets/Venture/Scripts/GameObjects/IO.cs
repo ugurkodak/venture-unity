@@ -2,9 +2,9 @@
 
 namespace Venture
 {
-	public class Game : MonoBehaviour
+	public class IO : MonoBehaviour
 	{
-		public static Game Instance = null;
+		public static IO Instance = null;
 		public Console Console = null;
 
 		void Awake()
@@ -15,11 +15,6 @@ namespace Venture
 			else if (Instance != this)
 				Destroy(gameObject);
 			DontDestroyOnLoad(gameObject);
-		}
-
-		void Start()
-		{
-			Document.Instance.Open(Document.Instance.SignIn);
 		}
 	}
 }

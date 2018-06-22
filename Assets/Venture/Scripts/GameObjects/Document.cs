@@ -26,7 +26,7 @@ namespace Venture
 		public void Open(GameObject document)
 		{
 			current = Instantiate(document, Canvas.transform);
-			Game.Instance.Console = current.GetComponentInChildren<Console>();
+			IO.Instance.Console = current.GetComponentInChildren<Console>();
 			current.GetComponent<Animator>().SetTrigger("open");
 		}
 

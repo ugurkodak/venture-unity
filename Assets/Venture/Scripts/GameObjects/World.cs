@@ -22,27 +22,10 @@ namespace Venture
 
 		async void Start()
 		{
-			//Data.Create();
-			//await Data.Update();
-			await Data.Load("-LFAJZIOapn1RAmcojp0");
+			//await Data.Load(Character.Instance.Data.WorldId);
+			Data.Create();
 			Render();
-
-			//await AddNew();
-			//AddNew();
-			//SetupSession(Character.Instance.Data.WorldId);
-			//SetupSession("-LF-Msi7xLrg4xUHFuG3");
 		}
-
-		//public async Task SetupSession(string key)
-		//{
-		//	await Data.Load(key);
-		//}
-
-		//public async Task AddNew()
-		//{
-		//	Data.Create();
-		//	await Data.Add();
-		//}
 
 		public void Render()
 		{
