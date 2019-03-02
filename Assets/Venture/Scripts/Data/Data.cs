@@ -5,13 +5,15 @@ using Firebase.Unity.Editor;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Google;
+using UnityEngine;
 
 namespace Venture.Data
 {
+    public enum LoadState {  NONE, NEW_USER, CHARACTER, CITY }
+
     // TODO: Error handling
     public class GameData
     {
-        public enum LoadState {  NONE, USER, CHARACTER, CITY }
 
         public const string DATE_TIME_FORMAT = "yyyymmddhhmm";
 
@@ -76,11 +78,14 @@ namespace Venture.Data
                     (await GoogleSignIn.DefaultInstance.SignIn()).IdToken, null));
             userId = firebaseUser.UserId;
 #endif
+            // Login failed
+            if(userId == null)
+                return LoadState.NONE;
 
             // User is not registered if they don't exists in database
             DataSnapshot userSnapshot = await Database.Child("meta/user" + userId).GetValueAsync();
             if (!userSnapshot.Exists)
-                return LoadState.NONE;
+                return LoadState.NEW_USER;
             else
             {
                 //Init user meta
