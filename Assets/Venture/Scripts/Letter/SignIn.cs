@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Venture.Prefab
+namespace Venture
 {
     public class SignIn : Letter
     {

@@ -1,31 +1,22 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Venture
 {
+    // Prints console messages on a letter
     public class LetterConsole : MonoBehaviour
     {
         ScrollRect scrollRect;
         RectTransform content;
         Text outputText;
-        // List<string> messages;
-
-        public string initialMessage;
 
         void Awake()
         {
-            // Game.Instance.Console = this; // TODO: temp
-            // messages = new List<string>();
             scrollRect = GetComponent<ScrollRect>();
             content = scrollRect.content;
             outputText = content.GetComponent<Text>();
 
             Game.Instance.Console.MessageRecieved += OnConsoleMessageRecieved;
-            // Print(initialMessage);
         }
 
         public void OnConsoleMessageRecieved(object source, ConsoleEventArgs e)

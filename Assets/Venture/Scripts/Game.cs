@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using Venture.Data;
+using Google;
 
 namespace Venture
 {
+    // Global cotainer for everthing
     public class Game : MonoBehaviour
     {
         public static Game Instance;
         public GameData Data;
         public Console Console;
-        public Prefab.LetterManager LetterManager;
+        public LetterManager LetterManager;
 
         void Awake()
         {
@@ -16,7 +18,7 @@ namespace Venture
                 Instance = this;
             else if (Instance != this)
                 Destroy(gameObject);
-            //DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
 
             Data = new GameData();
             Console = new Console();
@@ -24,7 +26,6 @@ namespace Venture
 
         private void Start()
         {
-            LetterManager = transform.Find("LetterManager").GetComponent<Prefab.LetterManager>();
             LetterManager.Open(LetterManager.SignIn);
         }
     }

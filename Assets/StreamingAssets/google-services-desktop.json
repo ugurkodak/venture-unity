@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "356906761499-btav07r99ahu1743jusi635bnlo4re10.apps.googleusercontent.com",
+          "client_id": "356906761499-815ooerogiu3iftq9v7tges3f5jv3l6s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.venture.android",
-            "certificate_hash": "2b9508701f4369d5b1010130c3581965fc189292"
+            "certificate_hash": "5c938f8f4b8468ff75b504a0acef2a1f9687f5d3"
           }
         },
         {

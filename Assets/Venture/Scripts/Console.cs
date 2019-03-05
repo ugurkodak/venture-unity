@@ -35,8 +35,7 @@ namespace Venture
 
         protected virtual void OnMessageRecieved(List<string> messages)
         {
-            if (MessageRecieved != null)
-                MessageRecieved(this, new ConsoleEventArgs() { messages = messages });
+            MessageRecieved?.Invoke(this, new ConsoleEventArgs() { messages = messages });
         }
     }
 }

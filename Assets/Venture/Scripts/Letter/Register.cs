@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 using Venture.Data;
 
 namespace Venture
@@ -25,11 +24,11 @@ namespace Venture
 
         public override async void Submit()
         {
-            await Game.Instance.Data.Register(Game.Instance.Data.UserId, new Character.CharacterMeta
+            await Game.Instance.Data.Register(Game.Instance.Data.UserId, new CharacterMeta
             {
                 firstName = FirstNameField.text,
                 lastName = LastNameField.text,
-                prefix = Character.CharacterPrefix.MX
+                prefix = CharacterPrefix.MX
             });
 
             if (Game.Instance.Data.User != null)

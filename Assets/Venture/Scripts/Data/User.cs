@@ -13,19 +13,19 @@ namespace Venture.Data
             Id = id;
             Meta = meta;
         }
+    }
 
-        // Modifiable values stored in a user document
-        public struct UserMeta
+    // Modifiable values stored in a user document
+    public struct UserMeta
+    {
+        public string characterId;
+
+        public Dictionary<string, object> ToDictionary()
         {
-            public string characterId;
-
-            public Dictionary<string, object> ToDictionary()
+            return new Dictionary<string, object>
             {
-                return new Dictionary<string, object>
-                {
-                    ["characterId"] = characterId
-                };
-            }
+                ["characterId"] = characterId
+            };
         }
     }
 }

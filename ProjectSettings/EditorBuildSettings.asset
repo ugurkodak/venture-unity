@@ -7,5 +7,5 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Venture/Game.unity
-    guid: c92841e5f256b7648a6c3aaabddde3e8
+    guid: 6756a084bd1e0f04e96769010ca667d7
   m_configObjects: {}
