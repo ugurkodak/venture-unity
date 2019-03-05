@@ -16,23 +16,16 @@ namespace Venture
                 Instance = this;
             else if (Instance != this)
                 Destroy(gameObject);
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
 
             Data = new GameData();
             Console = new Console();
-            LetterManager = transform.Find("LetterManager").GetComponent<Prefab.LetterManager>();
         }
 
-        void Start()
+        private void Start()
         {
+            LetterManager = transform.Find("LetterManager").GetComponent<Prefab.LetterManager>();
             LetterManager.Open(LetterManager.SignIn);
-            //await Data.Register("UNITY-EDITOR", new Character.CharacterMeta
-            //{
-            //    firstName = "Ugur",
-            //    lastName = "Kodak",
-            //    prefix = Character.CharacterPrefix.MR
-            //});
-            //Debug.Log(Data.Character.Meta);
         }
     }
 }

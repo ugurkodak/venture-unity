@@ -18,7 +18,6 @@ namespace Venture.Prefab
         //     SignInButton.onClick.Invoke();
         // }
 
-        // TODO
         public override void Open()
         {
             Game.Instance.Console.Print("SigninLetter: Open");
@@ -26,37 +25,22 @@ namespace Venture.Prefab
 
         public override async void Submit()
         {
-            Game.Instance.Console.Print("Signing in...");
             gameObject.GetComponentInChildren<Text>().text = "Signing In...";
             gameObject.GetComponentInChildren<Text>().fontStyle = FontStyle.Normal;
 
-            Data.LoadState state = await Game.Instance.Data.Login();
-
-            switch (state)
+            await Game.Instance.Data.Login();
+            // Data is loaded
+            if (Game.Instance.Data.User != null)
             {
-                case Data.LoadState.NONE:
-                    {
-                        Game.Instance.Console.Print("Login failed.");
-                        break;
-                    }
-                case Data.LoadState.NEW_USER:
-                    {
-                        Game.Instance.Console.Print("New User.");
-                        Game.Instance.LetterManager.Open(Game.Instance.LetterManager.Register);
-                        Game.Instance.LetterManager.List.Remove(this);
-                        Destroy(this); //TODO animation
-                        break;
-                    }
-                case Data.LoadState.CHARACTER:
-                    {
-                        Game.Instance.Console.Print("Login succedeed.");
-                        break;
-                    }
-                default:
-                    {
-                        Game.Instance.Console.Print("Error: Unexpected login result");
-                        break;
-                    }
+                Game.Instance.Console.Print("Login succeeded.");
+            }
+            // New user
+            else
+            {
+                Game.Instance.Console.Print("New user.");
+                Game.Instance.LetterManager.Open(Game.Instance.LetterManager.Register);
+                Game.Instance.LetterManager.List.Remove(this);
+                Destroy(this); // TODO animation
             }
         }
 

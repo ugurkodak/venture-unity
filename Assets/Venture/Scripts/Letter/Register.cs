@@ -25,13 +25,17 @@ namespace Venture
 
         public override async void Submit()
         {
-            Game.Instance.Console.Print("HEEEEEY");
-            // await Game.Instance.Data.Register(Game.Instance.Data.User.Id, new Character.CharacterMeta
-            // {
-            //     firstName = FirstNameField.text,
-            //     lastName = LastNameField.text,
-            //     prefix = Character.CharacterPrefix.MX
-            // });
+            await Game.Instance.Data.Register(Game.Instance.Data.UserId, new Character.CharacterMeta
+            {
+                firstName = FirstNameField.text,
+                lastName = LastNameField.text,
+                prefix = Character.CharacterPrefix.MX
+            });
+
+            if (Game.Instance.Data.User != null)
+            {
+                Game.Instance.Console.Print("Register succeeded.");
+            }
         }
 
         public override void Postpone()
