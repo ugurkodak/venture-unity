@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5018500938084797691}
   - component: {fileID: 5127114764879567091}
   m_Layer: 5
-  m_Name: LetterConsole
+  m_Name: ViewportLetterConsole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.14}
+  m_AnchorMax: {x: 1, y: 0.15}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -356,10 +356,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: c2c436dc404ed574db29d68550402b41, type: 3}
-    m_FontSize: 44
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 0
     m_MaxSize: 50
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -646,7 +646,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5020626393499139211}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.93028563
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

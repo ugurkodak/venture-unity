@@ -30,7 +30,7 @@ namespace Venture
                 messages.RemoveAt(MAX_MESSAGE_COUNT);
             messages.Insert(0, message);
 
-            OnMessageRecieved(this.messages);
+            OnMessageRecieved(messages);
         }
 
         protected virtual void OnMessageRecieved(List<string> messages)

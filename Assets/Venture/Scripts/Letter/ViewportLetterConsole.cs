@@ -4,13 +4,13 @@ using UnityEngine.UI;
 namespace Venture
 {
     // Prints console messages on a letter
-    public class LetterConsole : MonoBehaviour
+    public class ViewportLetterConsole : MonoBehaviour
     {
         ScrollRect scrollRect;
         RectTransform content;
         Text outputText;
 
-        void Awake()
+        void Start()
         {
             scrollRect = GetComponent<ScrollRect>();
             content = scrollRect.content;

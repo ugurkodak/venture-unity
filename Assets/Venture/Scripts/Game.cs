@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Venture.Data;
-using Google;
 
 namespace Venture
 {
@@ -10,7 +9,9 @@ namespace Venture
         public static Game Instance;
         public GameData Data;
         public Console Console;
-        public LetterManager LetterManager;
+        public ManagerLetter ManagerLetter;
+
+        public bool UIFlowDisabled = false; // For trying out prefabs in play mode
 
         void Awake()
         {
@@ -24,9 +25,10 @@ namespace Venture
             Console = new Console();
         }
 
-        private void Start()
+        private async void Start()
         {
-            LetterManager.Open(LetterManager.SignIn);
+            if (!UIFlowDisabled)
+                await ManagerLetter.Open(ManagerLetter.LetterSignIn);
         }
     }
 }
