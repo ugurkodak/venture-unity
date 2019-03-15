@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Venture
@@ -24,8 +25,14 @@ namespace Venture
             string txt = "";
             foreach (string s in e.messages)
                 txt += "*" + s + "\n";
-            outputText.text = txt;
-            scrollRect.verticalNormalizedPosition = 1;
+            if (outputText == null)
+                // Unsubscribe when letter is destroyed
+                Game.Instance.Console.MessageRecieved -= OnConsoleMessageRecieved;
+            else
+            {
+                outputText.text = txt;
+                scrollRect.verticalNormalizedPosition = 1;
+            }
         }
     }
 }

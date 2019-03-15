@@ -167,5 +167,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114639743191568844, guid: a303175f0bd247d4590e083955c548aa,
+        type: 3}
+      propertyPath: UIFlowDisabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a303175f0bd247d4590e083955c548aa, type: 3}

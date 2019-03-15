@@ -48,6 +48,7 @@ namespace Venture.Data
 #endif
         }
 
+        // Force firstname lastname combination to be unique
         public async Task Register(string userId, CharacterMeta characterMeta)
         {
             Dictionary<string, object> updates = new Dictionary<string, object>();
@@ -109,6 +110,28 @@ namespace Venture.Data
                 lastName = (string)characterMeta["lastName"],
                 prefix = (CharacterPrefix)(long)characterMeta["prefix"]
             });
+        }
+
+        public async Task<List<string>> GetCharacterFirstNames()
+        {
+            //TODO: Get names from database
+            List<string> names = new List<string>()
+            {
+                "Anne", "Wolfgang", "Ludwig", "Marie", "John", "George", "Andrew", "Catherine", "Louis"
+            };
+
+            return names;
+        }
+
+        public async Task<List<string>> GetCharacterLastNames()
+        {
+            //TODO: Get names from database
+            List<string> names = new List<string>()
+            {
+                "Franklin", "Jackson", "Kant", "Burns", "Rousseau", "Handel", "Goya", "Haydn", "Bentham"
+            };
+
+            return names;
         }
     }
 }

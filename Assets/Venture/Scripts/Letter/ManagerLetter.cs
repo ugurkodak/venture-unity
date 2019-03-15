@@ -53,7 +53,7 @@ namespace Venture
 
         public async Task Discard(Letter letter)
         {
-            await letter.Discard();
+            letter.Discard();
             queue.Remove(letter);
             Destroy(letter.gameObject);
         }
